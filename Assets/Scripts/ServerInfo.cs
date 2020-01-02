@@ -25,6 +25,8 @@ public class ServerInfo : ServerInfoBehavior {
             GetComponent<MultiplayerMenu>().Host();
 
             networkObject.numPlayers = 0;
+        } else {
+            Application.targetFrameRate = 120;
         }
     }
 
@@ -53,11 +55,11 @@ public class ServerInfo : ServerInfoBehavior {
 
     void InitServer() {
         // Debug.Log(next.buildIndex);
-        if(isServer) {
+        if (isServer) {
             networkObject.numPlayers = 0;
             print("Server Initialized");
         }
-        
+
         if (!Application.isBatchMode) {
             RequestJoin();
         }
