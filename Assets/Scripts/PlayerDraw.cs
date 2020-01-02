@@ -9,18 +9,19 @@ public class PlayerDraw : PlayerDrawBehavior {
     public PaintCanvas paintCanvas;
 
     /// Fineness of angle sweeping when drawing circles. Smaller = more precise circles; larger = faster
-    public float ANGLE_STEP = 0.1f;
+    public float angleStep = 0.1f;
 
-    /// How much distance should be skipped in between lerping. (For filling in gaps when cursor is moving quickly)
-    public float LERP_STEP = 0.05f;
-
-    /// Minumum distance between successive cursor positions in order to fill in the middle
-    public float LERP_THRESHOLD = 100f;
+    // How many seconds in between canvas updates
+    public float updateInterval = 0.25f;
 
     Vector2 prevPos;
     bool isDragging = false;
 
+    Color32[] cur_colors;
+
     private void Start() {
+
+        StartCoroutine(UpdateCanvas(updateInterval));
         var data = paintCanvas.GetAllTextureData();
         var zippeddata = data.Compress();
 
@@ -29,7 +30,7 @@ public class PlayerDraw : PlayerDrawBehavior {
 
     private void Update() {
 
-        if(Input.GetMouseButtonUp(0)) isDragging = false;
+        if (Input.GetMouseButtonUp(0)) isDragging = false;
 
         if (Input.GetMouseButton(0)) {
 
@@ -64,7 +65,7 @@ public class PlayerDraw : PlayerDrawBehavior {
                     //     }
                     // }
 
-                    if(!isDragging)
+                    if (!isDragging)
                         prevPos = pixelUV;
                     else
                         ColorBetween(prevPos, pixelUV, Color.black, 10);
@@ -116,13 +117,34 @@ public class PlayerDraw : PlayerDrawBehavior {
         //     }
         // }
         for (int r = 0; r < size; r++) {
-            for (float angle = 0; angle < Mathf.PI * 2; angle += ANGLE_STEP) {
+            for (float angle = 0; angle < Mathf.PI * 2; angle += angleStep) {
                 float x1 = r * Mathf.Cos(angle);
                 float y1 = r * Mathf.Sin(angle);
-                paintCanvas.Texture.SetPixel((int) (pixelUV.x + x1), (int) (pixelUV.y + y1), color);
+
+                // Need to transform x and y coordinates to flat coordinates of array
+                int array_pos = (int) (paintCanvas.Texture.width * (int) (pixelUV.y + y1) + (pixelUV.x + x1));
+
+                // Check if this is a valid position
+                if (array_pos > cur_colors.Length || array_pos < 0)
+                    return;
+
+                cur_colors[array_pos] = color;
+                // ((int) (pixelUV.x + x1), (int) (pixelUV.y + y1), color);
             }
         }
 
-        paintCanvas.Texture.Apply();
+    }
+
+    private IEnumerator UpdateCanvas(float updateInterval) {
+        while (true) {
+            if (paintCanvas.Texture != null) {
+                if(cur_colors != null) {
+                    paintCanvas.Texture.SetPixels32(cur_colors);
+                    paintCanvas.Texture.Apply();
+                }
+                cur_colors = paintCanvas.Texture.GetPixels32();
+            }
+            yield return new WaitForSeconds(updateInterval);
+        }
     }
 }
