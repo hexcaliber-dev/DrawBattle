@@ -233,8 +233,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintCanvas: {fileID: 2135322533}
-  angleStep: 0.05
-  updateInterval: 0.03
 --- !u!4 &732288867
 Transform:
   m_ObjectHideFlags: 0
@@ -320,7 +318,7 @@ GameObject:
   - component: {fileID: 2135322529}
   - component: {fileID: 2135322533}
   m_Layer: 0
-  m_Name: Quad
+  m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -412,3 +410,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2229d4a8ce41eae488d3959b6478daee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  angleStep: 0.1
+  updateInterval: 0.01
