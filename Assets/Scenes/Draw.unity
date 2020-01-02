@@ -233,9 +233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   paintCanvas: {fileID: 2135322533}
-  ANGLE_STEP: 0.1
-  LERP_STEP: 0.1
-  LERP_THRESHOLD: 100
+  angleStep: 0.05
+  updateInterval: 0.03
 --- !u!4 &732288867
 Transform:
   m_ObjectHideFlags: 0
