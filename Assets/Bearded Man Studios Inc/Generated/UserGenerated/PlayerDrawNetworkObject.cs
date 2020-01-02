@@ -6,9 +6,9 @@ using UnityEngine;
 namespace BeardedManStudios.Forge.Networking.Generated
 {
 	[GeneratedInterpol("{\"inter\":[]")]
-	public partial class SpawnerNetworkObject : NetworkObject
+	public partial class PlayerDrawNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 7;
+		public const int IDENTITY = 9;
 
 		private byte[] _dirtyFields = new byte[0];
 
@@ -75,9 +75,9 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		}
 
-		public SpawnerNetworkObject() : base() { Initialize(); }
-		public SpawnerNetworkObject(NetWorker networker, INetworkBehavior networkBehavior = null, int createCode = 0, byte[] metadata = null) : base(networker, networkBehavior, createCode, metadata) { Initialize(); }
-		public SpawnerNetworkObject(NetWorker networker, uint serverId, FrameStream frame) : base(networker, serverId, frame) { Initialize(); }
+		public PlayerDrawNetworkObject() : base() { Initialize(); }
+		public PlayerDrawNetworkObject(NetWorker networker, INetworkBehavior networkBehavior = null, int createCode = 0, byte[] metadata = null) : base(networker, networkBehavior, createCode, metadata) { Initialize(); }
+		public PlayerDrawNetworkObject(NetWorker networker, uint serverId, FrameStream frame) : base(networker, serverId, frame) { Initialize(); }
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}
