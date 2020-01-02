@@ -25,6 +25,7 @@ public class Spawner : SpawnerBehavior {
     }
 
     public void RequestSpawn() {
+        // Runs Spawn Object through server
         networkObject.SendRpc(RPC_SPAWN_OBJECT, Receivers.AllBuffered, ServerInfo.playerNum - 1);
     }
 }
