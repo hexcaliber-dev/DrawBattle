@@ -25,6 +25,7 @@ public class BaseScript : MonoBehaviour
     {        
         player.ChangeHealth(-1);
         Debug.Log("Health: " + player.health);
+        Destroy(col);
     }
 
 
