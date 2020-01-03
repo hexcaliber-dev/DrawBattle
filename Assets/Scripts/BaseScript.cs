@@ -5,8 +5,6 @@ using UnityEngine;
 public class BaseScript : MonoBehaviour
 {
 
-    public int health;
-
     PlayerScript player;    
 
     // Start is called before the first frame update
@@ -25,7 +23,7 @@ public class BaseScript : MonoBehaviour
     {        
         player.ChangeHealth(-1);
         Debug.Log("Health: " + player.health);
-        Destroy(col);
+        Destroy(col.gameObject);
     }
 
 
