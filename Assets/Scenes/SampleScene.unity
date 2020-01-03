@@ -605,11 +605,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: -0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 3368017817770613776, guid: 23ea10179cb8c2e46a5671d0f698deff,
-        type: 3}
-      propertyPath: maxAngularSpeed
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4530017726795161215, guid: 23ea10179cb8c2e46a5671d0f698deff,
         type: 3}
       propertyPath: m_BodyType

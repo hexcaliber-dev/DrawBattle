@@ -38,20 +38,21 @@ public class PlayerController : MonoBehaviour
         }
         else if ( Input.GetKey(KeyCode.W) ) 
         {
-            speed += Accelerate(speed, maxSpeed);
+            speed += Accelerate(speed, maxSpeed, acceleration);
             translate = 1f * speed;
         }
         else if ( Input.GetKey(KeyCode.S) )
         {
-            speed += Accelerate(speed, maxSpeed);
+            speed += Accelerate(speed, maxSpeed, acceleration);
             translate = -1f * speed;
         }
         else {
             translate = 0;
             speed = 0;
         }
-        changeVector = new Vector2(0, translate);
-        transform.position += changeVector;
+        if ( translate > 0 ){transform.position += transform.up * speed;}
+        if ( translate < 0 ){transform.position -= transform.up * speed;}
+        
     }
    
     void Turning()
@@ -64,12 +65,12 @@ public class PlayerController : MonoBehaviour
         }
         else if ( Input.GetKey(KeyCode.A) ) 
         {
-            angularSpeed += Accelerate(angularSpeed, maxAngularSpeed);
+            angularSpeed += Accelerate(angularSpeed, maxAngularSpeed, angularAccerlation);
             turn = 1f * angularSpeed;
         }
         else if ( Input.GetKey(KeyCode.D) )
         {
-            angularSpeed += Accelerate(angularSpeed, maxAngularSpeed);
+            angularSpeed += Accelerate(angularSpeed, maxAngularSpeed, angularAccerlation);
             turn = -1f * angularSpeed;
         }
         else {
@@ -77,16 +78,15 @@ public class PlayerController : MonoBehaviour
             angularSpeed = 0;
         }
         //changeVector = new Vector3(0, 0 , turn);
-        Debug.Log(turn);
-
+        //Debug.Log(turn);
         transform.Rotate(Vector3.forward * turn);
     }
 
-    float Accelerate( float s, float max)
+    float Accelerate( float s, float m, float a)
     {
-        if (s < maxSpeed)
+        if (s < m)
         {
-            return acceleration;
+            return a;
         }
         return 0;
     }

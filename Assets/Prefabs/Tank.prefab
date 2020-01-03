@@ -95,9 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 076ae7ade01ef6340bd8b27cb7ee89e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 0.15
-  maxAngularSpeed: 1
-  acceleration: 0.01
+  maxSpeed: 0.1
+  maxAngularSpeed: 3
+  acceleration: 0.005
   angularAccerlation: 0.01
 --- !u!50 &-369982566243462533
 Rigidbody2D:
