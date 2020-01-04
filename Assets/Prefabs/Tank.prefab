@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 653b99ecfaa1d794abd15f737f6c17c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxAngularSpeed: 2
+  angularAccerlation: 0.1
 --- !u!1 &3054468305140883136
 GameObject:
   m_ObjectHideFlags: 0

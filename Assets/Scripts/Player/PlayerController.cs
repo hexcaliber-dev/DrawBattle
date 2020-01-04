@@ -19,6 +19,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         speed = 0;
+        angularSpeed = 0;
     }
 
 
