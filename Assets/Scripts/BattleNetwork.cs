@@ -23,12 +23,14 @@ public class BattleNetwork : BattleNetworkBehavior {
         base.NetworkStart();
 
         // if(ServerInfo.isServer) {
-        networkObject.SendRpc(RPC_SPAWN_TANK, Receivers.All);
+        networkObject.SendRpc(RPC_SPAWN_TANK, Receivers.Server, ServerInfo.playerNum);
         // }
     }
 
     public override void SpawnTank(RpcArgs args) {
-        print("Spawn tank " + ServerInfo.playerNum);
-        PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity) as PlayerController;
+        int ownerNum = args.GetNext<int>();
+        print("Spawn tank " + ownerNum);
+        PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ownerNum - 1].position, Quaternion.identity) as PlayerController;
+        newTank.owner = args.Info.SendingPlayer;
     }
 }

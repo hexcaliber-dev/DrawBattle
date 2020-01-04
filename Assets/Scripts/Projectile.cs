@@ -21,9 +21,7 @@ public class Projectile : ProjectileBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
         if (tempTextureData != null) {
-            // networkObject.SendRpc(RPC_CHANGE_TEXTURE, Receivers.AllBuffered, tempTextureData);\
             texture.LoadRawTextureData(tempTextureData.Decompress());
-            print("Loaded new texture data");
             texture.Apply();
         }
         transform.position = new Vector3(transform.position.x, transform.position.y, 10);
