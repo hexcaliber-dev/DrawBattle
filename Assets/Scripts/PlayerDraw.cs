@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
 public class PlayerDraw : PlayerDrawBehavior {
@@ -45,9 +46,9 @@ public class PlayerDraw : PlayerDrawBehavior {
                     if (!isDragging)
                         prevPos = pixelUV;
                     else
-                        paintCanvas.ColorBetween(prevPos, pixelUV, Color.black, 10);
+                        paintCanvas.ColorBetween(prevPos, pixelUV, Color.black, 5);
 
-                    paintCanvas.BrushAreaWithColor(pixelUV, Color.black, 10);
+                    paintCanvas.BrushAreaWithColor(pixelUV, Color.black, 5);
                     prevPos = pixelUV;
                     isDragging = true;
                 }
@@ -57,6 +58,21 @@ public class PlayerDraw : PlayerDrawBehavior {
 
     public override void SendFullTexture(RpcArgs args) {
         byte[] textureData = args.GetNext<byte[]>();
-        paintCanvas.SetAllTextureData(textureData.Decompress());
+        paintCanvas.SetAllTextureData(textureData.Compress());
+
+        // // Testing
+        // NetworkManager.Instance.InstantiateProjectile().networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, textureData);
+    }
+
+    public void RequestSendTexture() {
+        if (networkObject != null) {
+            // networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, paintCanvas.GetAllTextureData());
+            // Testing
+            byte[] textureData = paintCanvas.GetAllTextureData();
+            // paintCanvas.SetAllTextureData(textureData.Compress());
+            print("Sending texture data...");
+            Projectile newProj = NetworkManager.Instance.InstantiateProjectile() as Projectile;
+            newProj.tempTextureData = textureData.Compress();
+        }
     }
 }

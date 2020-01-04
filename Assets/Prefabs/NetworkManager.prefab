@@ -50,10 +50,13 @@ MonoBehaviour:
   - {fileID: 1000012738253334, guid: feb25ecf90a8d8b4ab922a455249997b, type: 3}
   NetworkCameraNetworkObject:
   - {fileID: 139536, guid: 661f29f0c0c86fa47b6015bd602d0ac6, type: 3}
-  ServerInfoNetworkObject: []
-  SpawnerNetworkObject: []
-  TestNetworkObject: []
+  PlayerDrawNetworkObject: []
   PlayerObjNetworkObject:
   - {fileID: 5754918036913639203, guid: 081ccd9e2604bda499b80f3d2fb28bf5, type: 3}
   - {fileID: 5754918036913639203, guid: 8c2052d8e14e7d44e9546611d2c7ce4f, type: 3}
+  ServerInfoNetworkObject: []
+  SpawnerNetworkObject: []
+  TestNetworkObject: []
+  ProjectileNetworkObject:
+  - {fileID: 5202736712948167559, guid: 5919779a6902eb3419416905c77bb509, type: 3}
   automaticScenes: 1
