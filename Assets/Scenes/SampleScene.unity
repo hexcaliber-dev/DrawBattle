@@ -784,7 +784,7 @@ PrefabInstance:
     - target: {fileID: 6255031660403063492, guid: 2bb543a68585aea408fc4dae0a900d88,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.98
+      value: -4.02
       objectReference: {fileID: 0}
     - target: {fileID: 6255031660403063492, guid: 2bb543a68585aea408fc4dae0a900d88,
         type: 3}
@@ -919,25 +919,15 @@ PrefabInstance:
       propertyPath: m_Name
       value: Barrier
       objectReference: {fileID: 0}
-    - target: {fileID: 6200140989697959024, guid: 2bb543a68585aea408fc4dae0a900d88,
-        type: 3}
-      propertyPath: m_Offset.y
-      value: 4.2291136
-      objectReference: {fileID: 0}
-    - target: {fileID: 6200140989697959024, guid: 2bb543a68585aea408fc4dae0a900d88,
-        type: 3}
-      propertyPath: m_Size.y
-      value: 10.708227
-      objectReference: {fileID: 0}
     - target: {fileID: 6255031660403063492, guid: 2bb543a68585aea408fc4dae0a900d88,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.01
+      value: -0.046
       objectReference: {fileID: 0}
     - target: {fileID: 6255031660403063492, guid: 2bb543a68585aea408fc4dae0a900d88,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 6.01
+      value: 4.02
       objectReference: {fileID: 0}
     - target: {fileID: 6255031660403063492, guid: 2bb543a68585aea408fc4dae0a900d88,
         type: 3}
@@ -997,6 +987,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsTrigger
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461165002464109916, guid: 23ea10179cb8c2e46a5671d0f698deff,
+        type: 3}
+      propertyPath: m_IsKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461165002464109916, guid: 23ea10179cb8c2e46a5671d0f698deff,
+        type: 3}
+      propertyPath: m_UseGravity
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6461165002464109916, guid: 23ea10179cb8c2e46a5671d0f698deff,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 8908367892114132094, guid: 23ea10179cb8c2e46a5671d0f698deff,
         type: 3}
