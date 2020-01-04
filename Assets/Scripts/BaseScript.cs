@@ -19,7 +19,7 @@ public class BaseScript : MonoBehaviour
         
     }
 
-    void OnTriggerEnter2D(Collider2D col)
+    void OnTriggerEnter(Collider col)
     {        
         player.ChangeHealth(-1);
         Debug.Log("Health: " + player.health);
