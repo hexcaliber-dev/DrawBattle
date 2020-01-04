@@ -4,14 +4,12 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"byte[]\", \"int\"][\"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"textureData\", \"player\"][\"playerNum\"]]")]
-	public abstract partial class PlayerDrawBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[]")]
+	[GeneratedRPCVariableNames("{\"types\":[]")]
+	public abstract partial class PlayerControllerBehavior : NetworkBehavior
 	{
-		public const byte RPC_SEND_FULL_TEXTURE = 0 + 5;
-		public const byte RPC_SEND_DRAWING_COMPLETE = 1 + 5;
 		
-		public PlayerDrawNetworkObject networkObject = null;
+		public PlayerControllerNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -19,12 +17,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (PlayerDrawNetworkObject)obj;
+			networkObject = (PlayerControllerNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("SendFullTexture", SendFullTexture, typeof(byte[]), typeof(int));
-			networkObject.RegisterRpc("SendDrawingComplete", SendDrawingComplete, typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -82,7 +78,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new PlayerDrawNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new PlayerControllerNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -93,7 +89,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new PlayerDrawNetworkObject(networker, this, createCode, metadata);
+			return new PlayerControllerNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -101,17 +97,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
-		/// <summary>
-		/// Arguments:
-		/// byte[] textureData
-		/// int player
-		/// </summary>
-		public abstract void SendFullTexture(RpcArgs args);
-		/// <summary>
-		/// Arguments:
-		/// int playerNum
-		/// </summary>
-		public abstract void SendDrawingComplete(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

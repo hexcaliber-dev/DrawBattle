@@ -10,6 +10,8 @@ public class Projectile : ProjectileBehavior {
 
     public byte[] tempTextureData;
 
+    public float speed = 1f;
+
     // Start is called before the first frame update
     void Start() {
         texture = (Texture2D) GameObject.Instantiate(GetComponent<Renderer>().material.mainTexture);
@@ -27,6 +29,7 @@ public class Projectile : ProjectileBehavior {
     // Update is called once per frame
     void Update() {
         if (networkObject.IsOwner) {
+            transform.position += transform.up * speed;
             networkObject.position = transform.position;
             networkObject.rotation = transform.rotation;
         } else {

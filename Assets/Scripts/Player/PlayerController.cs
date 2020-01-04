@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour
-{
+public class PlayerController : PlayerControllerBehavior {
 
     [SerializeField] private float maxSpeed;
     [SerializeField] private float maxAngularSpeed;
@@ -16,65 +18,61 @@ public class PlayerController : MonoBehaviour
     private float direction;
     private Vector3 changeVector;
     // Start is called before the first frame update
-    void Start()
-    {
+    protected override void NetworkStart() {
+        base.NetworkStart();
         speed = 0;
         angularSpeed = 0;
+        transform.Translate(0, 0, -transform.position.z);
     }
 
-
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         Turning();
         Movement();
+        ServerUpdate();
     }
 
-    void Movement()
-    {
+    void ServerUpdate() {
+        if (networkObject.IsOwner) {
+            networkObject.position = transform.position;
+            networkObject.rotation = transform.rotation;
+        } else {
+            transform.position = networkObject.position;
+            transform.rotation = networkObject.rotation;
+        }
+    }
+
+    void Movement() {
         // Fix so that the player can't change direction the frame let go
         // and go the same speed
-        if ( Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S) )
-        {
+        if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S)) {
             speed = 0;
-        }
-        else if ( Input.GetKey(KeyCode.W) ) 
-        {
+        } else if (Input.GetKey(KeyCode.W)) {
             speed += Accelerate(speed, maxSpeed, acceleration);
             translate = 1f * speed;
-        }
-        else if ( Input.GetKey(KeyCode.S) )
-        {
+        } else if (Input.GetKey(KeyCode.S)) {
             speed += Accelerate(speed, maxSpeed, acceleration);
             translate = -1f * speed;
-        }
-        else {
+        } else {
             translate = 0;
             speed = 0;
         }
-        if ( translate > 0 ){transform.position += transform.up * speed;}
-        if ( translate < 0 ){transform.position -= transform.up * speed;}
-        
+        if (translate > 0) { transform.position += transform.up * speed; }
+        if (translate < 0) { transform.position -= transform.up * speed; }
+
     }
-   
-    void Turning()
-    {
+
+    void Turning() {
         // Fix so that the player can't change direction the frame let go
         // and go the same speed
-        if ( Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D) )
-        {
+        if (Input.GetKey(KeyCode.A) && Input.GetKey(KeyCode.D)) {
             angularSpeed = 0;
-        }
-        else if ( Input.GetKey(KeyCode.A) ) 
-        {
+        } else if (Input.GetKey(KeyCode.A)) {
             angularSpeed += Accelerate(angularSpeed, maxAngularSpeed, angularAccerlation);
             turn = 1f * angularSpeed;
-        }
-        else if ( Input.GetKey(KeyCode.D) )
-        {
+        } else if (Input.GetKey(KeyCode.D)) {
             angularSpeed += Accelerate(angularSpeed, maxAngularSpeed, angularAccerlation);
             turn = -1f * angularSpeed;
-        }
-        else {
+        } else {
             turn = 0;
             angularSpeed = 0;
         }
@@ -83,15 +81,11 @@ public class PlayerController : MonoBehaviour
         transform.Rotate(Vector3.forward * turn);
     }
 
-    float Accelerate( float s, float m, float a)
-    {
-        if (s < m)
-        {
+    float Accelerate(float s, float m, float a) {
+        if (s < m) {
             return a;
         }
         return 0;
     }
-
-
 
 }

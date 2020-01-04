@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"player\"]]")]
-	public abstract partial class SpawnerBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[[]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[]]")]
+	public abstract partial class BattleNetworkBehavior : NetworkBehavior
 	{
-		public const byte RPC_SPAWN_OBJECT = 0 + 5;
+		public const byte RPC_SPAWN_TANK = 0 + 5;
 		
-		public SpawnerNetworkObject networkObject = null;
+		public BattleNetworkNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -18,11 +18,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (SpawnerNetworkObject)obj;
+			networkObject = (BattleNetworkNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("SpawnObject", SpawnObject, typeof(int));
+			networkObject.RegisterRpc("SpawnTank", SpawnTank);
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -80,7 +80,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new SpawnerNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new BattleNetworkNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -91,7 +91,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new SpawnerNetworkObject(networker, this, createCode, metadata);
+			return new BattleNetworkNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -101,9 +101,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		/// <summary>
 		/// Arguments:
-		/// int player
 		/// </summary>
-		public abstract void SpawnObject(RpcArgs args);
+		public abstract void SpawnTank(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

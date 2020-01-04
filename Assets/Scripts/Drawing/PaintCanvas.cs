@@ -63,7 +63,7 @@ public class PaintCanvas : MonoBehaviour {
         Vector2 cur_position = start_point;
 
         // Calculate how many times we should interpolate between start_point and end_point based on the amount of time that has passed since the last update
-        float lerp_steps = 1 / distance * 10;
+        float lerp_steps = 1 / distance * 5;
 
         for (float lerp = 0; lerp <= 1; lerp += lerp_steps) {
             cur_position = Vector2.Lerp(start_point, end_point, lerp);

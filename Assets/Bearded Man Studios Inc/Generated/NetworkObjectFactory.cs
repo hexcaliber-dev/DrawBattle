@@ -23,6 +23,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				switch (identity)
 				{
+					case BattleNetworkNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new BattleNetworkNetworkObject(networker, id, frame);
+						break;
 					case ChatManagerNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new ChatManagerNetworkObject(networker, id, frame);
@@ -39,6 +43,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new NetworkCameraNetworkObject(networker, id, frame);
 						break;
+					case PlayerControllerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new PlayerControllerNetworkObject(networker, id, frame);
+						break;
 					case PlayerDrawNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new PlayerDrawNetworkObject(networker, id, frame);
@@ -47,21 +55,17 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new PlayerObjNetworkObject(networker, id, frame);
 						break;
+					case ProjectileNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new ProjectileNetworkObject(networker, id, frame);
+						break;
 					case ServerInfoNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new ServerInfoNetworkObject(networker, id, frame);
 						break;
-					case SpawnerNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new SpawnerNetworkObject(networker, id, frame);
-						break;
 					case TestNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new TestNetworkObject(networker, id, frame);
-						break;
-					case ProjectileNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new ProjectileNetworkObject(networker, id, frame);
 						break;
 				}
 

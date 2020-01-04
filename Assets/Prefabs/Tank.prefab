@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2077363363937626576}
   - component: {fileID: 8295742353407297415}
+  - component: {fileID: 9030297198946767895}
   m_Layer: 0
   m_Name: TankHead
   m_TagString: Untagged
@@ -46,6 +47,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxAngularSpeed: 2
   angularAccerlation: 0.1
+--- !u!114 &9030297198946767895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1368855132163516186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0b2fdd831c32924ea3b16203658a3d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3054468305140883136
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,13 +211,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7857073116690295969}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.65, y: -0.84, z: 9.215781}
+  m_LocalRotation: {x: -0.01778202, y: -0.0318667, z: 0.48695707, w: 0.87266326}
+  m_LocalPosition: {x: 1.06, y: 0.09, z: 9.215782}
   m_LocalScale: {x: 10, y: 10, z: 0.99999994}
   m_Children: []
   m_Father: {fileID: 2077363363937626576}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -4.183, z: 58.324}
 --- !u!23 &742341557197734582
 MeshRenderer:
   m_ObjectHideFlags: 0

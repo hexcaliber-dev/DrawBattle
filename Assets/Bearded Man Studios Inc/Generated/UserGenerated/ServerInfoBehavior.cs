@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[]]")]
+	[GeneratedRPC("{\"types\":[[][\"int\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[][\"newPhase\"]]")]
 	public abstract partial class ServerInfoBehavior : NetworkBehavior
 	{
 		public const byte RPC_JOIN_GAME = 0 + 5;
+		public const byte RPC_CHANGE_PHASE = 1 + 5;
 		
 		public ServerInfoNetworkObject networkObject = null;
 
@@ -23,6 +24,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("JoinGame", JoinGame);
+			networkObject.RegisterRpc("ChangePhase", ChangePhase, typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -103,6 +105,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// Arguments:
 		/// </summary>
 		public abstract void JoinGame(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// </summary>
+		public abstract void ChangePhase(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}
