@@ -14,6 +14,9 @@ public class PaintCanvas : MonoBehaviour {
     /// Flattened array of pixels and their colors. See https://docs.unity3d.com/ScriptReference/Texture2D.SetPixels32.html for more info
     private Color32[] cur_colors;
 
+    /// Keep track of window resize events to reposition canvas
+    private Vector2 resolution;
+
     public byte[] GetAllTextureData() {
         return texture.GetRawTextureData();
     }
@@ -21,6 +24,25 @@ public class PaintCanvas : MonoBehaviour {
     private void Start() {
         PrepareTemporaryTexture();
         StartCoroutine(UpdateCanvas(updateInterval));
+    }
+
+    private void Awake() {
+        resolution = new Vector2(Screen.width, Screen.height);
+        Recenter();
+    }
+
+    private void Update() {
+        if (resolution.x != Screen.width || resolution.y != Screen.height) {
+            // Reposition at center of screen
+            Recenter();
+
+            resolution.x = Screen.width;
+            resolution.y = Screen.height;
+        }
+    }
+
+    private void Recenter() {
+        transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f));
     }
 
     private void PrepareTemporaryTexture() {

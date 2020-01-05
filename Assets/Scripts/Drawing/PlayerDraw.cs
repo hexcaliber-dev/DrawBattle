@@ -50,12 +50,13 @@ public class PlayerDraw : PlayerDrawBehavior {
                     pixelUV.x *= tex.width;
                     pixelUV.y *= tex.height;
 
+                    Color currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
                     if (!isDragging)
                         prevPos = pixelUV;
                     else
-                        paintCanvas.ColorBetween(prevPos, pixelUV, Color.black, 5);
+                        paintCanvas.ColorBetween(prevPos, pixelUV, currColor, 5);
 
-                    paintCanvas.BrushAreaWithColor(pixelUV, Color.black, 5);
+                    paintCanvas.BrushAreaWithColor(pixelUV, currColor, 5);
                     prevPos = pixelUV;
                     isDragging = true;
                 }
@@ -79,7 +80,7 @@ public class PlayerDraw : PlayerDrawBehavior {
             completedPlayers++;
 
             if (completedPlayers == serverInfo.networkObject.numPlayers) {
-                serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int)ServerInfo.GamePhase.Battling);
+                serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Battling);
             }
         } else {
             Debug.LogError("Server-only RPC SendDrawing was called on a client!");
