@@ -8,13 +8,13 @@ public class ColorPicker : MonoBehaviour {
     public GameObject sliderPanel;
     public Slider hueSlider, lightSlider;
 
-    public Color currColor = Color.black;
+    public Color currColor = new Color(0, 0, 0, 1);
 
     // Start is called before the first frame update
     void Awake() {
-        lightSlider.onValueChanged.AddListener(delegate { OnSliderChange(); });
-        hueSlider.onValueChanged.AddListener(delegate { OnSliderChange(); });
-        OnSliderChange();
+        lightSlider.onValueChanged.AddListener(delegate { ChangeLightness(); });
+        hueSlider.onValueChanged.AddListener(delegate { ChangeHue(); });
+        UpdateColorDisplays();
     }
 
     // Update is called once per frame
@@ -22,16 +22,29 @@ public class ColorPicker : MonoBehaviour {
 
     }
 
-    void OnSliderChange() {
+    void ChangeHue() {
         currColor = Color.HSVToRGB(hueSlider.value, lightSlider.value, lightSlider.value);
+        UpdateColorDisplays();
+    }
+
+    void ChangeLightness() {
+        float tempH, tempS, _;
+        Color.RGBToHSV(currColor, out tempH, out tempS, out _);
+        currColor = Color.HSVToRGB(tempH, tempS, lightSlider.value);
+        UpdateColorDisplays();
+    }
+
+    void UpdateColorDisplays() {
         colorDisplay.color = currColor;
-        lightSliderBackground.color = currColor;
+
+        float tempH, tempS, _;
+        Color.RGBToHSV(currColor, out tempH, out tempS, out _);
+        lightSliderBackground.color = Color.HSVToRGB(tempH, tempS, 1);
     }
 
     public void ChangeColor(Color newColor) {
         currColor = newColor;
-        colorDisplay.color = currColor;
-        lightSliderBackground.color = currColor;
+        UpdateColorDisplays();
     }
 
     public void ToggleSliders() {

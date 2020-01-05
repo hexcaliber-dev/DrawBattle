@@ -51,12 +51,13 @@ public class PlayerDraw : PlayerDrawBehavior {
                     pixelUV.y *= tex.height;
 
                     Color currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
+                    int currSize = GameObject.FindObjectOfType<BrushPicker>().brushSize;
                     if (!isDragging)
                         prevPos = pixelUV;
                     else
-                        paintCanvas.ColorBetween(prevPos, pixelUV, currColor, 5);
+                        paintCanvas.ColorBetween(prevPos, pixelUV, currColor, currSize);
 
-                    paintCanvas.BrushAreaWithColor(pixelUV, currColor, 5);
+                    paintCanvas.BrushAreaWithColor(pixelUV, currColor, currSize);
                     prevPos = pixelUV;
                     isDragging = true;
                 }
