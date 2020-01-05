@@ -8,12 +8,13 @@ public class ColorPicker : MonoBehaviour {
     public GameObject sliderPanel;
     public Slider hueSlider, lightSlider;
 
-    public Color currColor;
+    public Color currColor = Color.black;
 
     // Start is called before the first frame update
     void Awake() {
         lightSlider.onValueChanged.AddListener(delegate { OnSliderChange(); });
         hueSlider.onValueChanged.AddListener(delegate { OnSliderChange(); });
+        OnSliderChange();
     }
 
     // Update is called once per frame
@@ -25,5 +26,15 @@ public class ColorPicker : MonoBehaviour {
         currColor = Color.HSVToRGB(hueSlider.value, lightSlider.value, lightSlider.value);
         colorDisplay.color = currColor;
         lightSliderBackground.color = currColor;
+    }
+
+    public void ChangeColor(Color newColor) {
+        currColor = newColor;
+        colorDisplay.color = currColor;
+        lightSliderBackground.color = currColor;
+    }
+
+    public void ToggleSliders() {
+        sliderPanel.SetActive(!sliderPanel.activeSelf);
     }
 }
