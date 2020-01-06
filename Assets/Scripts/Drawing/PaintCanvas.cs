@@ -12,6 +12,7 @@ public class PaintCanvas : MonoBehaviour {
     public float updateInterval = 1 / 60f;
 
     /// Flattened array of pixels and their colors. See https://docs.unity3d.com/ScriptReference/Texture2D.SetPixels32.html for more info
+    /// When dealing with the canvas, DO NOT directly edit the texture! It will be overwritten. Instead, edit cur_colors.
     private Color32[] cur_colors;
 
     /// Keep track of window resize events to reposition canvas
@@ -104,6 +105,12 @@ public class PaintCanvas : MonoBehaviour {
                 cur_colors = texture.GetPixels32();
             }
             yield return new WaitForSeconds(updateInterval);
+        }
+    }
+
+    public void ResetCanvas() {
+        for(int i = 0; i < cur_colors.Length; i++) {
+            cur_colors[i] = new Color32(0,0,0,0);
         }
     }
 }
