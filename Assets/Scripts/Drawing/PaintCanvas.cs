@@ -48,14 +48,11 @@ public class PaintCanvas : MonoBehaviour {
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f));
 
         // Fix for tall aspect ratios
-
-        print(0.1f * Screen.width / Screen.height);
-
         if (1f * Screen.width / Screen.height <= 1.5 && !tallAspectRatio) {
-            transform.localScale *= 0.9f;
+            transform.localScale *= 0.7f;
             tallAspectRatio = true;
         } else if(tallAspectRatio) {
-            transform.localScale *= 1.1f;
+            transform.localScale /= 0.7f;
             tallAspectRatio = false;
         }
     }
