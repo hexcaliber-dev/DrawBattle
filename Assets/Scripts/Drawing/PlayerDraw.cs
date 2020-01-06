@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerDraw : PlayerDrawBehavior {
 
@@ -20,11 +21,23 @@ public class PlayerDraw : PlayerDrawBehavior {
 
     ServerInfo serverInfo;
 
+    public bool eraserEnabled = false;
+    public Sprite penEnabledImg, penDisabledImg, eraserEnabledImg, eraserDisabledImg;
+    public Button penButton, eraserButton;
+
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
     }
 
     private void Update() {
+
+        // Pencil/eraser
+        if(Input.GetKeyDown(KeyCode.P)) {
+            SetEraserEnabled(false);
+        }
+        if(Input.GetKeyDown(KeyCode.E)) {
+            SetEraserEnabled(true);
+        }
 
         if (Input.GetMouseButtonUp(0)) isDragging = false;
 
@@ -50,7 +63,11 @@ public class PlayerDraw : PlayerDrawBehavior {
                     pixelUV.x *= tex.width;
                     pixelUV.y *= tex.height;
 
-                    Color currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
+                    Color currColor = new Color(0, 0, 0, 0);
+
+                    if (!eraserEnabled)
+                        currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
+
                     int currSize = GameObject.FindObjectOfType<BrushPicker>().brushSize;
                     if (!isDragging)
                         prevPos = pixelUV;
@@ -107,6 +124,18 @@ public class PlayerDraw : PlayerDrawBehavior {
             print("Sending texture data...");
             Projectile newProj = NetworkManager.Instance.InstantiateProjectile() as Projectile;
             newProj.tempTextureData = textureData.Compress();
+        }
+    }
+
+    public void SetEraserEnabled(bool newVal) {
+        eraserEnabled = newVal;
+
+        if (eraserEnabled) {
+            eraserButton.image.sprite = eraserEnabledImg;
+            penButton.image.sprite = penDisabledImg;
+        } else {
+            eraserButton.image.sprite = eraserDisabledImg;
+            penButton.image.sprite = penEnabledImg;
         }
     }
 }
