@@ -15,6 +15,8 @@ public class PaintCanvas : MonoBehaviour {
     /// When dealing with the canvas, DO NOT directly edit the texture! It will be overwritten. Instead, edit cur_colors.
     private Color32[] cur_colors;
 
+    private bool tallAspectRatio = false;
+
     /// Keep track of window resize events to reposition canvas
     private Vector2 resolution;
 
@@ -33,7 +35,7 @@ public class PaintCanvas : MonoBehaviour {
     }
 
     private void Update() {
-        if (resolution.x != Screen.width || resolution.y != Screen.height) {
+        if (resolution.x != Screen.width || resolution.y != Screen.height || transform.position != Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f))) {
             // Reposition at center of screen
             Recenter();
 
@@ -44,6 +46,18 @@ public class PaintCanvas : MonoBehaviour {
 
     private void Recenter() {
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f));
+
+        // Fix for tall aspect ratios
+
+        print(0.1f * Screen.width / Screen.height);
+
+        if (1f * Screen.width / Screen.height <= 1.5 && !tallAspectRatio) {
+            transform.localScale *= 0.9f;
+            tallAspectRatio = true;
+        } else if(tallAspectRatio) {
+            transform.localScale *= 1.1f;
+            tallAspectRatio = false;
+        }
     }
 
     private void PrepareTemporaryTexture() {
@@ -109,8 +123,8 @@ public class PaintCanvas : MonoBehaviour {
     }
 
     public void ResetCanvas() {
-        for(int i = 0; i < cur_colors.Length; i++) {
-            cur_colors[i] = new Color32(0,0,0,0);
+        for (int i = 0; i < cur_colors.Length; i++) {
+            cur_colors[i] = new Color32(0, 0, 0, 0);
         }
     }
 }
