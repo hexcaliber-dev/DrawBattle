@@ -28,6 +28,8 @@ public class ColorPicker : MonoBehaviour {
     }
 
     void ChangeLightness() {
+
+        // Only set Value in HSV, leave the rest alone
         float tempH, tempS, _;
         Color.RGBToHSV(currColor, out tempH, out tempS, out _);
         currColor = Color.HSVToRGB(tempH, tempS, lightSlider.value);
@@ -37,6 +39,7 @@ public class ColorPicker : MonoBehaviour {
     void UpdateColorDisplays() {
         colorDisplay.color = currColor;
 
+        // Make sure the color is max value so there aren't wonky color jumps
         float tempH, tempS, _;
         Color.RGBToHSV(currColor, out tempH, out tempS, out _);
         lightSliderBackground.color = Color.HSVToRGB(tempH, tempS, 1);
