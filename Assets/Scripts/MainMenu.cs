@@ -8,17 +8,11 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
-    public InputField ipAddress = null;
-    public InputField portNumber = null;
     public bool DontChangeSceneOnConnect = false;
     public string masterServerHost = string.Empty;
     public ushort masterServerPort = 15940;
     public string natServerHost = string.Empty;
     public ushort natServerPort = 15941;
-    public bool connectUsingMatchmaking = false;
-    public bool useElo = false;
-    public int myElo = 0;
-    public int eloRequired = 0;
 
     public GameObject networkManager = null;
     public GameObject[] ToggledButtons;
@@ -35,9 +29,6 @@ public class MainMenu : MonoBehaviour {
     public bool useTCP = false;
 
     private void Start() {
-        ipAddress.text = "127.0.0.1";
-        portNumber.text = "15937";
-
         for (int i = 0; i < ToggledButtons.Length; ++i) {
             Button btn = ToggledButtons[i].GetComponent<Button>();
             if (btn != null)
@@ -46,76 +37,42 @@ public class MainMenu : MonoBehaviour {
 
         if (!useTCP) {
             // Do any firewall opening requests on the operating system
-            NetWorker.PingForFirewall(ushort.Parse(portNumber.text));
+            NetWorker.PingForFirewall(ServerInfo.SERVER_PORT);
         }
 
         if (useMainThreadManagerForRPCs)
             Rpc.MainThreadRunner = MainThreadManager.Instance;
 
-        if (getLocalNetworkConnections) {
-            NetWorker.localServerLocated += LocalServerLocated;
-            NetWorker.RefreshLocalUdpListings(ushort.Parse(portNumber.text));
-        }
+        // if (getLocalNetworkConnections) {
+        //     NetWorker.localServerLocated += LocalServerLocated;
+        //     NetWorker.RefreshLocalUdpListings(ServerInfo.SERVER_PORT);
+        // }
+        NetWorker.localServerLocated += LocalServerLocated;
     }
 
     private void LocalServerLocated(NetWorker.BroadcastEndpoints endpoint, NetWorker sender) {
-        Debug.Log("Found endpoint: " + endpoint.Address + ":" + endpoint.Port);
+        // Ignore virtual addresses from VMware
+        if(!endpoint.Address.Contains("56")) {
+            Debug.Log("Connecting to endpoint: " + endpoint.Address + ":" + endpoint.Port);
+            Connect(endpoint.Address);
+        }
     }
 
-    public void Connect() {
-        if (connectUsingMatchmaking) {
-            ConnectToMatchmaking();
-            return;
-        }
-        ushort port;
-        if (!ushort.TryParse(portNumber.text, out port)) {
-            Debug.LogError("The supplied port number is not within the allowed range 0-" + ushort.MaxValue);
-            return;
-        }
-
+    public void Connect(string ip) {
         NetWorker client;
 
         if (useTCP) {
             client = new TCPClient();
-            ((TCPClient) client).Connect(ipAddress.text, (ushort) port);
+            ((TCPClient) client).Connect(ip, ServerInfo.SERVER_PORT);
         } else {
             client = new UDPClient();
-            if (natServerHost.Trim().Length == 0)
-                ((UDPClient) client).Connect(ipAddress.text, (ushort) port);
-            else
-                ((UDPClient) client).Connect(ipAddress.text, (ushort) port, natServerHost, natServerPort);
-        }
-
-        Connected(client);
-    }
-
-    public void ConnectToMatchmaking() {
-        if (_matchmaking)
-            return;
-
-        SetToggledButtons(false);
-        _matchmaking = true;
-
-        if (mgr == null && networkManager == null)
-            throw new System.Exception("A network manager was not provided, this is required for the tons of fancy stuff");
-
-        mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
-
-        mgr.MatchmakingServersFromMasterServer(masterServerHost, masterServerPort, myElo, (response) => {
-            _matchmaking = false;
-            SetToggledButtons(true);
-            Debug.LogFormat("Matching Server(s) count[{0}]", response.serverResponse.Count);
-
-            //TODO: YOUR OWN MATCHMAKING EXTRA LOGIC HERE!
-            // I just make it randomly pick a server... you can do whatever you please!
-            if (response != null && response.serverResponse.Count > 0) {
-                MasterServerResponse.Server server = response.serverResponse[Random.Range(0, response.serverResponse.Count)];
-                //TCPClient client = new TCPClient();
-                UDPClient client = new UDPClient();
-                client.Connect(server.Address, server.Port);
-                Connected(client);
+            if (natServerHost.Trim().Length == 0) {
+                ((UDPClient) client).Connect(ip, ServerInfo.SERVER_PORT);
             }
-        });
+            else
+                ((UDPClient) client).Connect(ip, ServerInfo.SERVER_PORT, natServerHost, natServerPort);
+        }
+        Connected(client);
     }
 
     public void Host() {
@@ -126,9 +83,9 @@ public class MainMenu : MonoBehaviour {
             server = new UDPServer(64);
 
             if (natServerHost.Trim().Length == 0)
-                ((UDPServer) server).Connect(ipAddress.text, ushort.Parse(portNumber.text));
+                ((UDPServer) server).Connect(ServerInfo.LOCAL_SERVER_IP, ServerInfo.SERVER_PORT);
             else
-                ((UDPServer) server).Connect(port: ushort.Parse(portNumber.text), natHost: natServerHost, natPort: natServerPort);
+                ((UDPServer) server).Connect(port: ServerInfo.SERVER_PORT, natHost: natServerHost, natPort: natServerPort);
         }
 
         server.playerTimeout += (player, sender) => {
@@ -137,21 +94,21 @@ public class MainMenu : MonoBehaviour {
         //LobbyService.Instance.Initialize(server);
 
         Connected(server);
-        
+
         ServerInfo.isServer = true;
-        Debug.Log("Now hosting server on port " + portNumber.text);
+        Debug.Log("Now hosting server on port " + ServerInfo.SERVER_PORT.ToString());
     }
 
     private void Update() {
-        if (Input.GetKeyDown(KeyCode.H))
-            Host();
-        else if (Input.GetKeyDown(KeyCode.C))
-            Connect();
-        else if (Input.GetKeyDown(KeyCode.L)) {
-            NetWorker.localServerLocated -= TestLocalServerFind;
-            NetWorker.localServerLocated += TestLocalServerFind;
-            NetWorker.RefreshLocalUdpListings();
-        }
+        // if (Input.GetKeyDown(KeyCode.H))
+        //     Host();
+        // else if (Input.GetKeyDown(KeyCode.C))
+        //     Connect();
+        // else if (Input.GetKeyDown(KeyCode.L)) {
+        //     NetWorker.localServerLocated -= TestLocalServerFind;
+        //     NetWorker.localServerLocated += TestLocalServerFind;
+        //     NetWorker.RefreshLocalUdpListings();
+        // }
     }
 
     private void TestLocalServerFind(NetWorker.BroadcastEndpoints endpoint, NetWorker sender) {
@@ -171,6 +128,8 @@ public class MainMenu : MonoBehaviour {
         } else if (mgr == null)
             mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
 
+        print("HI");
+
         // If we are using the master server we need to get the registration data
         JSONNode masterServerData = null;
         if (!string.IsNullOrEmpty(masterServerHost)) {
@@ -180,7 +139,7 @@ public class MainMenu : MonoBehaviour {
             string mode = "Teams";
             string comment = "Demo comment...";
 
-            masterServerData = mgr.MasterServerRegisterData(networker, serverId, serverName, type, mode, comment, useElo, eloRequired);
+            masterServerData = mgr.MasterServerRegisterData(networker, serverId, serverName, type, mode, comment);
         }
 
         mgr.Initialize(networker, masterServerHost, masterServerPort, masterServerData);
@@ -194,6 +153,10 @@ public class MainMenu : MonoBehaviour {
             else
                 NetworkObject.Flush(networker); //Called because we are already in the correct scene!
         }
+    }
+
+    public void RefreshLocal() {
+        NetWorker.RefreshLocalUdpListings(ServerInfo.SERVER_PORT);
     }
 
     private void CreateInlineChat(Scene arg0, LoadSceneMode arg1) {
