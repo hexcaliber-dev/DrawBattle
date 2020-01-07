@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Unity;
 using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -40,6 +41,7 @@ public class ServerInfo : ServerInfoBehavior {
         base.NetworkStart();
         print("Connected to Network");
         InitServer();
+        NetworkManager.Instance.Networker.disconnected += delegate {Disconnect();};
     }
 
     // RPC Behavior
@@ -70,5 +72,10 @@ public class ServerInfo : ServerInfoBehavior {
         if (!Application.isBatchMode) {
             RequestJoin();
         }
+    }
+
+    void Disconnect() {
+        print("Disconnected from Server: Lost Connection");
+        SceneManager.LoadScene(0);
     }
 }
