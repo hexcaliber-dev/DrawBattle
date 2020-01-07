@@ -54,11 +54,15 @@ public class MainMenu : MonoBehaviour {
         // Ignore virtual addresses from VMware
         if(!endpoint.Address.Contains("56")) {
             Debug.Log("Connecting to endpoint: " + endpoint.Address + ":" + endpoint.Port);
-            Connect(endpoint.Address);
+
+            MainThreadManager.Run(() => {
+                Connect(endpoint.Address);
+            });
         }
     }
 
     public void Connect(string ip) {
+
         NetWorker client;
 
         if (useTCP) {
@@ -127,8 +131,6 @@ public class MainMenu : MonoBehaviour {
             mgr = networkManager.AddComponent<NetworkManager>();
         } else if (mgr == null)
             mgr = Instantiate(networkManager).GetComponent<NetworkManager>();
-
-        print("HI");
 
         // If we are using the master server we need to get the registration data
         JSONNode masterServerData = null;
