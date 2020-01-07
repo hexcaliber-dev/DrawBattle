@@ -87,7 +87,6 @@ public class MainMenu : MonoBehaviour {
         }
 
         Connected(client);
-        GameObject.FindObjectOfType<ServerInfo>().RequestJoin();
     }
 
     public void ConnectToMatchmaking() {

@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedInterpol("{\"inter\":[0.15,0.15,0,0]")]
+	[GeneratedInterpol("{\"inter\":[0.15,0.15,0,0,0]")]
 	public partial class ProjectileNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 10;
+		public const int IDENTITY = 13;
 
 		private byte[] _dirtyFields = new byte[1];
 
@@ -139,6 +139,37 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (damageChanged != null) damageChanged(_damage, timestep);
 			if (fieldAltered != null) fieldAltered("damage", _damage, timestep);
 		}
+		[ForgeGeneratedField]
+		private int _ownerNum;
+		public event FieldEvent<int> ownerNumChanged;
+		public Interpolated<int> ownerNumInterpolation = new Interpolated<int>() { LerpT = 0f, Enabled = false };
+		public int ownerNum
+		{
+			get { return _ownerNum; }
+			set
+			{
+				// Don't do anything if the value is the same
+				if (_ownerNum == value)
+					return;
+
+				// Mark the field as dirty for the network to transmit
+				_dirtyFields[0] |= 0x10;
+				_ownerNum = value;
+				hasDirtyFields = true;
+			}
+		}
+
+		public void SetownerNumDirty()
+		{
+			_dirtyFields[0] |= 0x10;
+			hasDirtyFields = true;
+		}
+
+		private void RunChange_ownerNum(ulong timestep)
+		{
+			if (ownerNumChanged != null) ownerNumChanged(_ownerNum, timestep);
+			if (fieldAltered != null) fieldAltered("ownerNum", _ownerNum, timestep);
+		}
 
 		protected override void OwnershipChanged()
 		{
@@ -152,6 +183,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			rotationInterpolation.current = rotationInterpolation.target;
 			speedInterpolation.current = speedInterpolation.target;
 			damageInterpolation.current = damageInterpolation.target;
+			ownerNumInterpolation.current = ownerNumInterpolation.target;
 		}
 
 		public override int UniqueIdentity { get { return IDENTITY; } }
@@ -162,6 +194,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			UnityObjectMapper.Instance.MapBytes(data, _rotation);
 			UnityObjectMapper.Instance.MapBytes(data, _speed);
 			UnityObjectMapper.Instance.MapBytes(data, _damage);
+			UnityObjectMapper.Instance.MapBytes(data, _ownerNum);
 
 			return data;
 		}
@@ -184,6 +217,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			damageInterpolation.current = _damage;
 			damageInterpolation.target = _damage;
 			RunChange_damage(timestep);
+			_ownerNum = UnityObjectMapper.Instance.Map<int>(payload);
+			ownerNumInterpolation.current = _ownerNum;
+			ownerNumInterpolation.target = _ownerNum;
+			RunChange_ownerNum(timestep);
 		}
 
 		protected override BMSByte SerializeDirtyFields()
@@ -199,6 +236,8 @@ namespace BeardedManStudios.Forge.Networking.Generated
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _speed);
 			if ((0x8 & _dirtyFields[0]) != 0)
 				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _damage);
+			if ((0x10 & _dirtyFields[0]) != 0)
+				UnityObjectMapper.Instance.MapBytes(dirtyFieldsData, _ownerNum);
 
 			// Reset all the dirty fields
 			for (int i = 0; i < _dirtyFields.Length; i++)
@@ -267,6 +306,19 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					RunChange_damage(timestep);
 				}
 			}
+			if ((0x10 & readDirtyFlags[0]) != 0)
+			{
+				if (ownerNumInterpolation.Enabled)
+				{
+					ownerNumInterpolation.target = UnityObjectMapper.Instance.Map<int>(data);
+					ownerNumInterpolation.Timestep = timestep;
+				}
+				else
+				{
+					_ownerNum = UnityObjectMapper.Instance.Map<int>(data);
+					RunChange_ownerNum(timestep);
+				}
+			}
 		}
 
 		public override void InterpolateUpdate()
@@ -293,6 +345,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				_damage = (int)damageInterpolation.Interpolate();
 				//RunChange_damage(damageInterpolation.Timestep);
+			}
+			if (ownerNumInterpolation.Enabled && !ownerNumInterpolation.current.UnityNear(ownerNumInterpolation.target, 0.0015f))
+			{
+				_ownerNum = (int)ownerNumInterpolation.Interpolate();
+				//RunChange_ownerNum(ownerNumInterpolation.Timestep);
 			}
 		}
 

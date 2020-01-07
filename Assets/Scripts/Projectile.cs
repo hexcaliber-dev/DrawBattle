@@ -6,11 +6,14 @@ using UnityEngine;
 
 public class Projectile : ProjectileBehavior {
 
-    Texture2D texture;
+    public Texture2D texture;
 
     public byte[] tempTextureData;
 
     public float speed = 1f;
+    public int tempOwnerNum = 0;
+
+    bool initialized = false;
 
     // Start is called before the first frame update
     void Start() {
@@ -20,29 +23,46 @@ public class Projectile : ProjectileBehavior {
 
     protected override void NetworkStart() {
         base.NetworkStart();
-        if (tempTextureData != null) {
-            texture.LoadRawTextureData(tempTextureData.Decompress());
-            texture.Apply();
-        }
         transform.position = new Vector3(transform.position.x, transform.position.y, 10);
     }
 
     // Update is called once per frame
     void Update() {
-        if (networkObject.IsOwner) {
-            transform.position += transform.up * speed;
-            networkObject.position = transform.position;
-            networkObject.rotation = transform.rotation;
-        } else {
-            transform.position = networkObject.position;
-            transform.rotation = networkObject.rotation;
+        if(networkObject != null) {
+            if (networkObject.IsOwner) {
+                transform.position += transform.up * speed;
+                networkObject.position = transform.position;
+                networkObject.rotation = transform.rotation;
+            } else {
+                transform.position = networkObject.position;
+                transform.rotation = networkObject.rotation;
+            }
+        }
+
+        if(!initialized && networkObject != null && tempOwnerNum > 0 && tempTextureData.Length > 0) {
+            networkObject.ownerNum = tempOwnerNum;
+            networkObject.SendRpc(RPC_INIT_PROJECTILE, Receivers.All, tempTextureData);
         }
     }
 
-    public override void ChangeTexture(RpcArgs args) {
-        byte[] newTexture = args.GetNext<byte[]>().Decompress();
-        texture.LoadRawTextureData(newTexture);
-        print("Loaded new texture data");
-        texture.Apply();
+    public void ApplyTexture(byte[] textureData) {
+        // If not yet connected, save texturedata to load on NetworkStart
+        if (networkObject == null) {
+            tempTextureData = textureData;
+        } else {
+            if (textureData.Length > 0) {
+                texture.LoadRawTextureData(textureData.Decompress());
+                texture.Apply();
+            } else {
+                Debug.LogError("No texture data was saved to Projectile for player " + networkObject.ownerNum);
+            }
+        }
+    }
+
+    public override void InitProjectile(RpcArgs args) {
+        byte[] textureData = args.GetNext<byte[]>();
+
+        ApplyTexture(textureData);
+        initialized = true;
     }
 }

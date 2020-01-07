@@ -29,8 +29,11 @@ public class BattleNetwork : BattleNetworkBehavior {
 
     public override void SpawnTank(RpcArgs args) {
         int ownerNum = args.GetNext<int>();
-        print("Spawn tank " + ownerNum);
-        PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ownerNum - 1].position, Quaternion.identity) as PlayerController;
-        newTank.owner = args.Info.SendingPlayer;
+
+        if(ownerNum > 0) {
+            print("Spawn tank " + ownerNum);
+            PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ownerNum - 1].position, Quaternion.identity) as PlayerController;
+            newTank.owner = args.Info.SendingPlayer;
+        }
     }
 }

@@ -19,7 +19,6 @@ public class ServerInfo : ServerInfoBehavior {
     // Start is called before the first frame update
     void Start() {
         isServer = Application.isBatchMode;
-        DontDestroyOnLoad(gameObject);
 
         if (isServer) {
             // Reduce refresh rate
@@ -27,10 +26,10 @@ public class ServerInfo : ServerInfoBehavior {
 
             print("==================================\n=    DrawBattle Server v1.0.0    =\n==================================");
 
-            GetComponent<MultiplayerMenu>().Host();
-
-            networkObject.numPlayers = 0;
+            GameObject.FindObjectOfType<MainMenu>().Host();
         }
+
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame
