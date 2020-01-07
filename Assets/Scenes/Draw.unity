@@ -1813,8 +1813,10 @@ MonoBehaviour:
   penDisabledImg: {fileID: 21300000, guid: 859b16e46f31d7e44adab396ea4a338a, type: 3}
   eraserEnabledImg: {fileID: 21300000, guid: c94d7b3a1fedfae4c9060f30a6eadb95, type: 3}
   eraserDisabledImg: {fileID: 21300000, guid: b6c9ddf928406564b820115457ea2e12, type: 3}
+  submittedImg: {fileID: 21300000, guid: 2e2c97816a767e6458e6005a34305d34, type: 3}
   penButton: {fileID: 399004683}
   eraserButton: {fileID: 2099099661}
+  submitButton: {fileID: 1175467170}
 --- !u!4 &732288867
 Transform:
   m_ObjectHideFlags: 0
@@ -2608,7 +2610,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 2
+  m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}

@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class ServerInfo : ServerInfoBehavior {
-    public const string REMOTE_SERVER_IP = "127.0.0.1";
+    public const string REMOTE_SERVER_IP = "bigrip.ocf.berkeley.edu";
     public const string LOCAL_SERVER_IP = "127.0.0.1";
 
     public const ushort SERVER_PORT = 15937;

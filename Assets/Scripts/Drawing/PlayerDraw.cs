@@ -22,8 +22,9 @@ public class PlayerDraw : PlayerDrawBehavior {
     ServerInfo serverInfo;
 
     public bool eraserEnabled = false;
-    public Sprite penEnabledImg, penDisabledImg, eraserEnabledImg, eraserDisabledImg;
+    public Sprite penEnabledImg, penDisabledImg, eraserEnabledImg, eraserDisabledImg, submittedImg;
     public Button penButton, eraserButton;
+    public Button submitButton;
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
@@ -112,20 +113,23 @@ public class PlayerDraw : PlayerDrawBehavior {
             // Save drawing
             byte[] textureData = paintCanvas.GetAllTextureData().Compress();
             PlayerShoot.textureData = textureData;
+
+            // Update button
+            submitButton.image.sprite = submittedImg;
         }
     }
 
-    public void RequestSendTexture() {
-        if (networkObject != null) {
-            // networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, paintCanvas.GetAllTextureData());
-            // Testing
-            byte[] textureData = paintCanvas.GetAllTextureData();
-            // paintCanvas.SetAllTextureData(textureData.Compress());
-            print("Sending texture data...");
-            Projectile newProj = NetworkManager.Instance.InstantiateProjectile() as Projectile;
-            newProj.tempTextureData = textureData.Compress();
-        }
-    }
+    // public void RequestSendTexture() {
+    //     if (networkObject != null) {
+    //         // networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, paintCanvas.GetAllTextureData());
+    //         // Testing
+    //         byte[] textureData = paintCanvas.GetAllTextureData();
+    //         // paintCanvas.SetAllTextureData(textureData.Compress());
+    //         print("Sending texture data...");
+    //         Projectile newProj = NetworkManager.Instance.InstantiateProjectile() as Projectile;
+    //         newProj.tempTextureData = textureData.Compress();
+    //     }
+    // }
 
     public void SetEraserEnabled(bool newVal) {
         eraserEnabled = newVal;
