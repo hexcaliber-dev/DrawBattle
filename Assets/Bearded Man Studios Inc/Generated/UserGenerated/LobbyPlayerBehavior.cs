@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\", \"Vector2\"][\"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"playerNum\", \"position\"][\"playerNum\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\", \"Vector2\"][\"int\", \"int\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"playerNum\", \"position\"][\"playerNum\", \"valToAdd\"]]")]
 	public abstract partial class LobbyPlayerBehavior : NetworkBehavior
 	{
 		public const byte RPC_DRAW = 0 + 5;
@@ -24,7 +24,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("Draw", Draw, typeof(int), typeof(Vector2));
-			networkObject.RegisterRpc("PlayerReady", PlayerReady, typeof(int));
+			networkObject.RegisterRpc("PlayerReady", PlayerReady, typeof(int), typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -110,6 +110,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// <summary>
 		/// Arguments:
 		/// int playerNum
+		/// int valToAdd
 		/// </summary>
 		public abstract void PlayerReady(RpcArgs args);
 

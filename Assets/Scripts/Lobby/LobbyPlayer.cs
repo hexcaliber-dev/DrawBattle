@@ -23,7 +23,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     ServerInfo serverInfo;
 
     public Button readyButton;
-    public Sprite readyButtonSubmitted;
+    public Sprite readyButtonSubmitted, readyButtonNormal;
 
     // Indices correspond with player numbers
     readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
@@ -98,9 +98,10 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     /// Should be run ONLY by the server.
     public override void PlayerReady(RpcArgs args) {
         int playerNum = args.GetNext<int>();
+        int valToAdd = args.GetNext<int>();
 
         if (ServerInfo.isServer) {
-            readyPlayers++;
+            readyPlayers+= valToAdd;
 
             if (readyPlayers == serverInfo.networkObject.numPlayers) {
                 serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Drawing);
@@ -110,14 +111,19 @@ public class LobbyPlayer : LobbyPlayerBehavior {
         }
     }
 
-    // Run when ready button is clicked
+    // Run when ready button is clicked. To cancel, pass in false for isReady
     public void RequestReady() {
         if (networkObject != null) {
-            // Do an RPC call to let the server know
-            networkObject.SendRpc(RPC_PLAYER_READY, Receivers.Server, ServerInfo.playerNum);
-
-            // Update button
-            readyButton.image.sprite = readyButtonSubmitted;
+            // Ready
+            if (readyButton.image.sprite == readyButtonNormal) {
+                // Do an RPC call to let the server know
+                networkObject.SendRpc(RPC_PLAYER_READY, Receivers.Server, ServerInfo.playerNum, 1);
+                readyButton.image.sprite = readyButtonSubmitted;
+                // Cancel
+            } else if (readyButton.image.sprite == readyButtonSubmitted) {
+                networkObject.SendRpc(RPC_PLAYER_READY, Receivers.Server, ServerInfo.playerNum, -1);
+                readyButton.image.sprite = readyButtonNormal;
+            }
         }
     }
 }
