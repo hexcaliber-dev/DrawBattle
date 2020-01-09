@@ -75,12 +75,17 @@ public class LobbyPlayer : LobbyPlayerBehavior {
                         for (float lerp = 0; lerp <= 1; lerp += lerp_steps) {
                             cur_position = Vector2.Lerp(prevPos, pixelUV, lerp);
                             lobbyCanvas.BrushAreaWithColor(cur_position, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
-                            networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
+
+                            if(networkObject != null) 
+                                networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
                         }
                     }
 
                     lobbyCanvas.BrushAreaWithColor(pixelUV, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
-                    // networkObject.SendRpc(RPC_DRAW, Receivers.All, ServerInfo.playerNum, pixelUV);
+
+                    if(networkObject != null)
+                        networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, pixelUV);
+
                     prevPos = pixelUV;
                     isDragging = true;
                 }
