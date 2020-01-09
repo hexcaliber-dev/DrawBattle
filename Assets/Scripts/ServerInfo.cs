@@ -25,7 +25,7 @@ public class ServerInfo : ServerInfoBehavior {
     public static bool isServer = false;
 
     // Used to keep track of game states. Each value corresponds to a scene index
-    public enum GamePhase { None, Drawing, Battling, Voting }
+    public enum GamePhase { None, Lobbying, Drawing, Battling, Voting }
 
     public GamePhase currPhase = GamePhase.None;
 
