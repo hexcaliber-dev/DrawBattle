@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+// Most of this code was made by the Forge team. See https://github.com/BeardedManStudios/ForgeNetworkingRemastered/wiki for more info
 public class MainMenu : MonoBehaviour {
     public bool DontChangeSceneOnConnect = false;
     public string masterServerHost = string.Empty;
@@ -52,7 +53,7 @@ public class MainMenu : MonoBehaviour {
 
     private void LocalServerLocated(NetWorker.BroadcastEndpoints endpoint, NetWorker sender) {
         // Ignore virtual addresses from VMware
-        if(!endpoint.Address.Contains("56")) {
+        if (!endpoint.Address.Contains("56")) {
             Debug.Log("Connecting to endpoint: " + endpoint.Address + ":" + endpoint.Port);
 
             MainThreadManager.Run(() => {
@@ -72,8 +73,7 @@ public class MainMenu : MonoBehaviour {
             client = new UDPClient();
             if (natServerHost.Trim().Length == 0) {
                 ((UDPClient) client).Connect(ip, ServerInfo.SERVER_PORT);
-            }
-            else
+            } else
                 ((UDPClient) client).Connect(ip, ServerInfo.SERVER_PORT, natServerHost, natServerPort);
         }
         Connected(client);

@@ -6,16 +6,25 @@ using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// Used to keep track of vital networking information and behaviors.
 public class ServerInfo : ServerInfoBehavior {
+
+    // TEMPORARY VALUE - replace with proper nat support etc for multiple server ips 
     public const string REMOTE_SERVER_IP = "bigrip.ocf.berkeley.edu";
+
+    // Used for hosting, but NOT connecting. Connecting dynamically searches for local ip's
     public const string LOCAL_SERVER_IP = "127.0.0.1";
 
+    // Used for LOCAL games, and temporarily for online-- but in the future online games will have dynamically assigned ports
     public const ushort SERVER_PORT = 15937;
 
+    // This player's number, assigned by join order
     public static int playerNum = 0;
 
+    // Is this instance a host? (Self-hosts are simultaneously servers and clients)
     public static bool isServer = false;
 
+    // Used to keep track of game states. Each value corresponds to a scene index
     public enum GamePhase { None, Drawing, Battling, Voting }
 
     public GamePhase currPhase = GamePhase.None;
@@ -24,12 +33,11 @@ public class ServerInfo : ServerInfoBehavior {
     void Start() {
         isServer = Application.isBatchMode;
 
+        // Prepare dedicated servers
         if (isServer) {
-            // Reduce refresh rate
+            // Reduce refresh rate to conserve cpu power
             Application.targetFrameRate = 30;
-
-            print("==================================\n=    DrawBattle Server v1.0.0    =\n==================================");
-
+            print("=======================================\n=    DrawBattle Server v1.0.0-alpha   =\n=======================================");
             GameObject.FindObjectOfType<MainMenu>().Host();
         }
 
@@ -39,19 +47,22 @@ public class ServerInfo : ServerInfoBehavior {
     // Update is called once per frame
     void Update() { }
 
+    // Is run when a connection is established
     protected override void NetworkStart() {
         base.NetworkStart();
         print("Connected to Network");
         InitServer();
+        // Add custom disconnect behavior
         NetworkManager.Instance.Networker.disconnected += delegate { Disconnect(); };
     }
 
-    // RPC Behavior
+    // Server-only RPC
     public override void JoinGame(RpcArgs args) {
         networkObject.numPlayers++;
         Debug.Log("Player " + networkObject.numPlayers + " joined the game");
     }
 
+    // All instance RPC
     public override void ChangePhase(RpcArgs args) {
         currPhase = (GamePhase) (args.GetNext<int>());
         print("Changing to " + currPhase.ToString() + " phase");
@@ -64,6 +75,7 @@ public class ServerInfo : ServerInfoBehavior {
         networkObject.SendRpc(RPC_JOIN_GAME, Receivers.Server);
     }
 
+    // Should be run on connection established
     void InitServer() {
         // Debug.Log(next.buildIndex);
         if (isServer) {
@@ -84,6 +96,7 @@ public class ServerInfo : ServerInfoBehavior {
         });
     }
 
+    // Opens the notification of a connection lost on the main menu
     void LoadLostConnectionPanel(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex == 0) {
             CanvasGroup lostConnPanel = GameObject.Find("Lost Connection Panel").GetComponent<CanvasGroup>();

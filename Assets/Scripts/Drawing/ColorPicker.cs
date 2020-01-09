@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// Manages brush color selection
 public class ColorPicker : MonoBehaviour {
     public Image colorDisplay, lightSliderBackground;
     public GameObject sliderPanel;
@@ -18,15 +19,15 @@ public class ColorPicker : MonoBehaviour {
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update() {}
 
-    }
-
+    // Run on hue slider change
     void ChangeHue() {
         currColor = Color.HSVToRGB(hueSlider.value, lightSlider.value, lightSlider.value);
         UpdateColorDisplays();
     }
 
+    // Run on lightness slider change
     void ChangeLightness() {
 
         // Only set Value in HSV, leave the rest alone
@@ -36,6 +37,7 @@ public class ColorPicker : MonoBehaviour {
         UpdateColorDisplays();
     }
 
+    // Changes the color display and lightness slider to reflect new color
     void UpdateColorDisplays() {
         colorDisplay.color = currColor;
 
@@ -45,11 +47,13 @@ public class ColorPicker : MonoBehaviour {
         lightSliderBackground.color = Color.HSVToRGB(tempH, tempS, 1);
     }
 
+    // Change color to a preset color (for buttons)
     public void ChangeColor(Color newColor) {
         currColor = newColor;
         UpdateColorDisplays();
     }
 
+    // Show/hide color sliders
     public void ToggleSliders() {
         sliderPanel.SetActive(!sliderPanel.activeSelf);
     }

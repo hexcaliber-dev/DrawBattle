@@ -2,20 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Controls buttons and panels in the main menu
 public class MainMenuNavigation : MonoBehaviour
 {
     public CanvasGroup mainPanel, localPanel, onlinePanel;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Start(){}
+    void Update() {}
 
     public void TogglePanel(CanvasGroup panelToToggle) {
         panelToToggle.alpha = (panelToToggle.alpha + 1) % 2;

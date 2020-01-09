@@ -4,12 +4,11 @@ using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Manages quit panel behavior for all phases. 
 public class QuitMenu : MonoBehaviour {
 
     // Start is called before the first frame update
-    void Start() {
-
-    }
+    void Start() {}
 
     // Update is called once per frame
     void Update() {

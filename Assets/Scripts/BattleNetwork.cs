@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
+/// Used for network management during the battle phase
 public class BattleNetwork : BattleNetworkBehavior {
 
     public Transform[] spawnLocations;

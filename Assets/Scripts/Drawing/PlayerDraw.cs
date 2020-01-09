@@ -7,6 +7,7 @@ using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// Player brush behavior on the drawing phase. IS a networkObject!
 public class PlayerDraw : PlayerDrawBehavior {
 
     public PaintCanvas paintCanvas;
@@ -32,7 +33,7 @@ public class PlayerDraw : PlayerDrawBehavior {
 
     private void Update() {
 
-        // Pencil/eraser
+        // Pencil/eraser switching
         if(Input.GetKeyDown(KeyCode.P)) {
             SetEraserEnabled(false);
         }
@@ -40,6 +41,7 @@ public class PlayerDraw : PlayerDrawBehavior {
             SetEraserEnabled(true);
         }
 
+        // Need to keep track of dragging to make sure lerping isn't done between penup/pendown
         if (Input.GetMouseButtonUp(0)) isDragging = false;
 
         if (Input.GetMouseButton(0)) {
@@ -83,6 +85,7 @@ public class PlayerDraw : PlayerDrawBehavior {
         }
     }
 
+    // Deprecated, use SendDrawingComplete() instead
     public override void SendFullTexture(RpcArgs args) {
         byte[] textureData = args.GetNext<byte[]>();
         paintCanvas.SetAllTextureData(textureData.Compress());
@@ -103,11 +106,13 @@ public class PlayerDraw : PlayerDrawBehavior {
         }
     }
 
+    // Run when submit button is clicked
     public void RequestCompleteDrawing() {
         if (networkObject != null) {
+            // Send drawing to server
             networkObject.SendRpc(RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
 
-            // Save drawing
+            // Save drawing locally
             byte[] textureData = paintCanvas.GetAllTextureData().Compress();
             PlayerShoot.textureData = textureData;
 
@@ -116,6 +121,7 @@ public class PlayerDraw : PlayerDrawBehavior {
         }
     }
 
+    // Toggles eraser.
     public void SetEraserEnabled(bool newVal) {
         eraserEnabled = newVal;
 

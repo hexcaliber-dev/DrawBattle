@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
+/// Manages shooting behavior of Projectiles
 public class PlayerShoot : PlayerShootBehavior {
 
     public static byte[] textureData;
@@ -15,16 +16,19 @@ public class PlayerShoot : PlayerShootBehavior {
 
     // Update is called once per frame
     void Update() {
+        // Only clients can send shoot requests for their own tank
         if (Input.GetKeyDown(KeyCode.Space) && GetComponentInParent<PlayerController>().networkObject.IsOwner && ServerInfo.playerNum > 0) {
             networkObject.SendRpc(RPC_SHOOT, Receivers.Server, textureData, ServerInfo.playerNum);
         }
     }
 
+    // Server only RPC
     public override void Shoot(RpcArgs args) {
         if (ServerInfo.isServer) {
             byte[] texture = args.GetNext<byte[]>();
             int ownerNum = args.GetNext<int>();
             Projectile newProj = NetworkManager.Instance.InstantiateProjectile(0, transform.position, transform.rotation) as Projectile;
+            // Set projectile data, to be used for NetworkStart
             newProj.tempOwnerNum = ownerNum;
             newProj.tempTextureData = texture;
         } else {

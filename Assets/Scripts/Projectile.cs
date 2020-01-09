@@ -4,6 +4,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 
+// The stuff that gets shot from tanks. Instantiation is controlled by PlayerShoot
 public class Projectile : ProjectileBehavior {
 
     public Texture2D texture;
@@ -39,12 +40,14 @@ public class Projectile : ProjectileBehavior {
             }
         }
 
+        // Check for 2 conditions: temp values were assigned properly AND object is connected to network
         if(!initialized && networkObject != null && tempOwnerNum > 0 && tempTextureData.Length > 0) {
             networkObject.ownerNum = tempOwnerNum;
             networkObject.SendRpc(RPC_INIT_PROJECTILE, Receivers.All, tempTextureData);
         }
     }
 
+    // Run on InitProjectile to actually apply the given texture
     public void ApplyTexture(byte[] textureData) {
         // If not yet connected, save texturedata to load on NetworkStart
         if (networkObject == null) {
@@ -59,6 +62,7 @@ public class Projectile : ProjectileBehavior {
         }
     }
 
+    // All-instance RPC. Initializes textures for this projectile
     public override void InitProjectile(RpcArgs args) {
         byte[] textureData = args.GetNext<byte[]>();
 

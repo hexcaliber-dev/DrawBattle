@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Behavior associated with canvas during draw phase. NOT a network object! Send info through PlayerDraw
 public class PaintCanvas : MonoBehaviour {
     public Texture2D texture { get; private set; }
 
@@ -15,6 +16,7 @@ public class PaintCanvas : MonoBehaviour {
     /// When dealing with the canvas, DO NOT directly edit the texture! It will be overwritten. Instead, edit cur_colors.
     private Color32[] cur_colors;
 
+    // True if using 3:2 or taller
     private bool tallAspectRatio = false;
 
     /// Keep track of window resize events to reposition canvas
@@ -35,6 +37,7 @@ public class PaintCanvas : MonoBehaviour {
     }
 
     private void Update() {
+        // Make sure canvas is the right size and position
         if (resolution.x != Screen.width || resolution.y != Screen.height || transform.position != Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f))) {
             // Reposition at center of screen
             Recenter();
@@ -44,6 +47,7 @@ public class PaintCanvas : MonoBehaviour {
         }
     }
 
+    // Center the canvas
     private void Recenter() {
         transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width / 2, Screen.height / 2, 5f));
 
@@ -57,11 +61,13 @@ public class PaintCanvas : MonoBehaviour {
         }
     }
 
+    // Run on Start to create an empty texture. Cannot be used to reset the canvas.
     private void PrepareTemporaryTexture() {
         texture = (Texture2D) GameObject.Instantiate(GetComponent<Renderer>().material.mainTexture);
         GetComponent<Renderer>().material.mainTexture = texture;
     }
 
+    // Deprecated, use UpdateCanvas() instead
     internal void SetAllTextureData(byte[] textureData) {
         texture.LoadRawTextureData(textureData);
         texture.Apply();
@@ -119,6 +125,7 @@ public class PaintCanvas : MonoBehaviour {
         }
     }
 
+    // Makes canvas blank
     public void ResetCanvas() {
         for (int i = 0; i < cur_colors.Length; i++) {
             cur_colors[i] = new Color32(0, 0, 0, 0);
