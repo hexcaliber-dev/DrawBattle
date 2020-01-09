@@ -76,14 +76,14 @@ public class LobbyPlayer : LobbyPlayerBehavior {
                             cur_position = Vector2.Lerp(prevPos, pixelUV, lerp);
                             lobbyCanvas.BrushAreaWithColor(cur_position, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
 
-                            if(networkObject != null) 
+                            if (networkObject != null)
                                 networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
                         }
                     }
 
                     lobbyCanvas.BrushAreaWithColor(pixelUV, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
 
-                    if(networkObject != null)
+                    if (networkObject != null)
                         networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, pixelUV);
 
                     prevPos = pixelUV;
@@ -106,7 +106,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
         int valToAdd = args.GetNext<int>();
 
         if (ServerInfo.isServer) {
-            readyPlayers+= valToAdd;
+            readyPlayers += valToAdd;
 
             if (readyPlayers == serverInfo.networkObject.numPlayers) {
                 serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Drawing);

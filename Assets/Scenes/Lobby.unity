@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 117717606}
   - component: {fileID: 117717605}
   m_Layer: 5
-  m_Name: Image
+  m_Name: Dot1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -305,7 +305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.757, y: 0.028582279}
   m_AnchorMax: {x: 0.97038335, y: 0.35274684}
-  m_AnchoredPosition: {x: -0.5, y: -1.199997}
+  m_AnchoredPosition: {x: -0.5, y: -1.1999817}
   m_SizeDelta: {x: -1.3999939, y: 9.600006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &455813823
@@ -689,7 +689,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   repeatTime: 1
   bounceTime: 0.25
-  bounceHeight: 10
+  bounceHeight: 5
   dots:
   - {fileID: 117717603}
   - {fileID: 1740185220}
@@ -1046,7 +1046,7 @@ GameObject:
   - component: {fileID: 1739070978}
   - component: {fileID: 1739070977}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: Dot3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1119,7 +1119,7 @@ GameObject:
   - component: {fileID: 1740185223}
   - component: {fileID: 1740185222}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: Dot2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

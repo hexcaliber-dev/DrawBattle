@@ -32,6 +32,9 @@ public class ServerInfo : ServerInfoBehavior {
 
     public GamePhase currPhase = GamePhase.None;
 
+    // Custom pen cursor
+    public Texture2D cursorTexture;
+
     // Start is called before the first frame update
     void Start() {
         isServer = Application.isBatchMode;
@@ -45,6 +48,8 @@ public class ServerInfo : ServerInfoBehavior {
         }
 
         DontDestroyOnLoad(gameObject);
+
+        SceneManager.sceneLoaded += ManageCursorOnSceneLoad;
     }
 
     // Update is called once per frame
@@ -62,11 +67,11 @@ public class ServerInfo : ServerInfoBehavior {
     // All instance RPC
     public override void LeaveGame(RpcArgs args) {
         int leavingPlayer = args.GetNext<int>();
-        if(isServer) {
+        if (isServer) {
             print("Player " + leavingPlayer + " left the game");
             networkObject.numPlayers--;
-            if(networkObject.numPlayers == 0) {
-                if(leavingPlayer == playerNum) {
+            if (networkObject.numPlayers == 0) {
+                if (leavingPlayer == playerNum) {
                     print("Closing server...");
                 } else {
                     print("All players have left! Restarting server...");
@@ -75,8 +80,8 @@ public class ServerInfo : ServerInfoBehavior {
                 }
             }
         }
-        
-        if(playerNum > leavingPlayer) {
+
+        if (playerNum > leavingPlayer) {
             playerNum--;
         }
     }
@@ -114,7 +119,7 @@ public class ServerInfo : ServerInfoBehavior {
     }
 
     void Disconnect() {
-        if(expectingQuit) {
+        if (expectingQuit) {
             expectingQuit = false;
         } else {
             print("Disconnected from Server: Lost Connection");
@@ -132,6 +137,14 @@ public class ServerInfo : ServerInfoBehavior {
             lostConnPanel.alpha = 1;
             lostConnPanel.blocksRaycasts = true;
             SceneManager.sceneLoaded -= LoadLostConnectionPanel;
+        }
+    }
+
+    void ManageCursorOnSceneLoad(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex == (int) GamePhase.Drawing || scene.buildIndex == (int) GamePhase.Lobbying) {
+            Cursor.SetCursor(cursorTexture, Vector2.up * 10f, CursorMode.Auto);
+        } else {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         }
     }
 }

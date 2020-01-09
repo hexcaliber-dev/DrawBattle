@@ -2,6 +2,7 @@
 using DG.Tweening;
 using UnityEngine;
 
+/// Credits: https://gist.github.com/reidscarboro/588911e7bc0e0ad82bfa8a1ad2397bd5
 public class LoadingDots : MonoBehaviour {
 
     //the total time of the animation
