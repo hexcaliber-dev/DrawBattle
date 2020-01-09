@@ -86,9 +86,6 @@ public class PlayerDraw : PlayerDrawBehavior {
     public override void SendFullTexture(RpcArgs args) {
         byte[] textureData = args.GetNext<byte[]>();
         paintCanvas.SetAllTextureData(textureData.Compress());
-
-        // // Testing
-        // NetworkManager.Instance.InstantiateProjectile().networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, textureData);
     }
 
     /// Should be run ONLY by the server.
@@ -118,18 +115,6 @@ public class PlayerDraw : PlayerDrawBehavior {
             submitButton.image.sprite = submittedImg;
         }
     }
-
-    // public void RequestSendTexture() {
-    //     if (networkObject != null) {
-    //         // networkObject.SendRpc(RPC_SEND_FULL_TEXTURE, Receivers.AllBuffered, paintCanvas.GetAllTextureData());
-    //         // Testing
-    //         byte[] textureData = paintCanvas.GetAllTextureData();
-    //         // paintCanvas.SetAllTextureData(textureData.Compress());
-    //         print("Sending texture data...");
-    //         Projectile newProj = NetworkManager.Instance.InstantiateProjectile() as Projectile;
-    //         newProj.tempTextureData = textureData.Compress();
-    //     }
-    // }
 
     public void SetEraserEnabled(bool newVal) {
         eraserEnabled = newVal;

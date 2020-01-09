@@ -1,8 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
-using BeardedManStudios.Forge.Networking.Unity;
 using BeardedManStudios.Forge.Networking.Generated;
+using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +16,7 @@ public class ServerInfo : ServerInfoBehavior {
 
     public static bool isServer = false;
 
-    public enum GamePhase {None, Drawing, Battling, Voting};
+    public enum GamePhase { None, Drawing, Battling, Voting }
 
     public GamePhase currPhase = GamePhase.None;
 
@@ -37,14 +37,13 @@ public class ServerInfo : ServerInfoBehavior {
     }
 
     // Update is called once per frame
-    void Update() {
-    }
+    void Update() { }
 
     protected override void NetworkStart() {
         base.NetworkStart();
         print("Connected to Network");
         InitServer();
-        NetworkManager.Instance.Networker.disconnected += delegate {Disconnect();};
+        NetworkManager.Instance.Networker.disconnected += delegate { Disconnect(); };
     }
 
     // RPC Behavior
@@ -54,9 +53,9 @@ public class ServerInfo : ServerInfoBehavior {
     }
 
     public override void ChangePhase(RpcArgs args) {
-        currPhase = (GamePhase)(args.GetNext<int>());
+        currPhase = (GamePhase) (args.GetNext<int>());
         print("Changing to " + currPhase.ToString() + " phase");
-        SceneManager.LoadScene((int)currPhase);
+        SceneManager.LoadScene((int) currPhase);
     }
 
     // Join button behavior
@@ -79,6 +78,18 @@ public class ServerInfo : ServerInfoBehavior {
 
     void Disconnect() {
         print("Disconnected from Server: Lost Connection");
-        SceneManager.LoadScene(0);
+        MainThreadManager.Run(() => {
+            SceneManager.sceneLoaded += LoadLostConnectionPanel;
+            SceneManager.LoadScene(0);
+        });
+    }
+
+    void LoadLostConnectionPanel(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex == 0) {
+            CanvasGroup lostConnPanel = GameObject.Find("Lost Connection Panel").GetComponent<CanvasGroup>();
+            lostConnPanel.alpha = 1;
+            lostConnPanel.blocksRaycasts = true;
+            SceneManager.sceneLoaded -= LoadLostConnectionPanel;
+        }
     }
 }
