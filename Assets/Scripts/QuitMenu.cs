@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using BeardedManStudios.Forge.Networking;
+using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -8,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class QuitMenu : MonoBehaviour {
 
     // Start is called before the first frame update
-    void Start() {}
+    void Start() { }
 
     // Update is called once per frame
     void Update() {
@@ -28,6 +30,8 @@ public class QuitMenu : MonoBehaviour {
     }
 
     public void QuitToMainMenu() {
+        ServerInfo.expectingQuit = true;
+        GameObject.FindObjectOfType<ServerInfo>().networkObject.SendRpc(ServerInfoBehavior.RPC_LEAVE_GAME, Receivers.All, ServerInfo.playerNum);
         GameObject.FindObjectOfType<NetworkManager>().Disconnect();
         SceneManager.LoadScene(0);
         print("Disconnected from Server: Player Quit");

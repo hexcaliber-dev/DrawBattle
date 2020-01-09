@@ -24,6 +24,9 @@ public class ServerInfo : ServerInfoBehavior {
     // Is this instance a host? (Self-hosts are simultaneously servers and clients)
     public static bool isServer = false;
 
+    // Set to true when player quits on purpose
+    public static bool expectingQuit = false;
+
     // Used to keep track of game states. Each value corresponds to a scene index
     public enum GamePhase { None, Lobbying, Drawing, Battling, Voting }
 
@@ -54,6 +57,28 @@ public class ServerInfo : ServerInfoBehavior {
         InitServer();
         // Add custom disconnect behavior
         NetworkManager.Instance.Networker.disconnected += delegate { Disconnect(); };
+    }
+
+    // All instance RPC
+    public override void LeaveGame(RpcArgs args) {
+        int leavingPlayer = args.GetNext<int>();
+        if(isServer) {
+            print("Player " + leavingPlayer + " left the game");
+            networkObject.numPlayers--;
+            if(networkObject.numPlayers == 0) {
+                if(leavingPlayer == playerNum) {
+                    print("Closing server...");
+                } else {
+                    print("All players have left! Restarting server...");
+                    currPhase = GamePhase.Lobbying;
+                    SceneManager.LoadScene(1);
+                }
+            }
+        }
+        
+        if(playerNum > leavingPlayer) {
+            playerNum--;
+        }
     }
 
     // Server-only RPC
@@ -89,11 +114,15 @@ public class ServerInfo : ServerInfoBehavior {
     }
 
     void Disconnect() {
-        print("Disconnected from Server: Lost Connection");
-        MainThreadManager.Run(() => {
-            SceneManager.sceneLoaded += LoadLostConnectionPanel;
-            SceneManager.LoadScene(0);
-        });
+        if(expectingQuit) {
+            expectingQuit = false;
+        } else {
+            print("Disconnected from Server: Lost Connection");
+            MainThreadManager.Run(() => {
+                SceneManager.sceneLoaded += LoadLostConnectionPanel;
+                SceneManager.LoadScene(0);
+            });
+        }
     }
 
     // Opens the notification of a connection lost on the main menu
