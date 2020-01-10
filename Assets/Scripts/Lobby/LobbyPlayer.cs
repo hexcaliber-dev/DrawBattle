@@ -21,6 +21,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     int readyPlayers = 0;
 
     ServerInfo serverInfo;
+    LobbyDots lobbyDots;
 
     public Button readyButton;
     public Sprite readyButtonSubmitted, readyButtonNormal;
@@ -30,6 +31,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
+        lobbyDots = GameObject.FindObjectOfType<LobbyDots>();
     }
 
     private void Update() {
@@ -123,10 +125,12 @@ public class LobbyPlayer : LobbyPlayerBehavior {
             if (readyButton.image.sprite == readyButtonNormal) {
                 // Do an RPC call to let the server know
                 networkObject.SendRpc(RPC_PLAYER_READY, Receivers.Server, ServerInfo.playerNum, 1);
+                lobbyDots.networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 2);
                 readyButton.image.sprite = readyButtonSubmitted;
                 // Cancel
             } else if (readyButton.image.sprite == readyButtonSubmitted) {
                 networkObject.SendRpc(RPC_PLAYER_READY, Receivers.Server, ServerInfo.playerNum, -1);
+                lobbyDots.networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 1);
                 readyButton.image.sprite = readyButtonNormal;
             }
         }

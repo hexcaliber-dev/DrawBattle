@@ -4073,6 +4073,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currPhase: 0
+  cursorTexture: {fileID: 2800000, guid: 4f8e1a86a0f127f4cbb6fc083dad9482, type: 3}
 --- !u!4 &2129521809
 Transform:
   m_ObjectHideFlags: 0

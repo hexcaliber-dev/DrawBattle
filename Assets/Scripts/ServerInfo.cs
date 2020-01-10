@@ -35,6 +35,8 @@ public class ServerInfo : ServerInfoBehavior {
     // Custom pen cursor
     public Texture2D cursorTexture;
 
+    LobbyDots lobbyDots;
+
     // Start is called before the first frame update
     void Start() {
         isServer = Application.isBatchMode;
@@ -70,6 +72,7 @@ public class ServerInfo : ServerInfoBehavior {
         if (isServer) {
             print("Player " + leavingPlayer + " left the game");
             networkObject.numPlayers--;
+            lobbyDots.networkObject.SendRpc(LobbyDotsBehavior.RPC_REMOVE_DOT, Receivers.AllBuffered, leavingPlayer);
             if (networkObject.numPlayers == 0) {
                 if (leavingPlayer == playerNum) {
                     print("Closing server...");
@@ -90,6 +93,7 @@ public class ServerInfo : ServerInfoBehavior {
     public override void JoinGame(RpcArgs args) {
         networkObject.numPlayers++;
         Debug.Log("Player " + networkObject.numPlayers + " joined the game");
+        lobbyDots.networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, networkObject.numPlayers - 1, 1);
     }
 
     // All instance RPC
@@ -141,6 +145,12 @@ public class ServerInfo : ServerInfoBehavior {
     }
 
     void ManageCursorOnSceneLoad(Scene scene, LoadSceneMode mode) {
+
+        // Snuck in a little lobby dots management here lol
+        if (scene.buildIndex == (int) GamePhase.Lobbying) {
+            lobbyDots = GameObject.FindObjectOfType<LobbyDots>();
+        }
+
         if (scene.buildIndex == (int) GamePhase.Drawing || scene.buildIndex == (int) GamePhase.Lobbying) {
             Cursor.SetCursor(cursorTexture, Vector2.up * 10f, CursorMode.Auto);
         } else {
