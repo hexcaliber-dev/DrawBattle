@@ -31,6 +31,7 @@ public class PlayerShoot : PlayerShootBehavior {
             // Set projectile data, to be used for NetworkStart
             newProj.tempOwnerNum = ownerNum;
             newProj.tempTextureData = texture;
+            Physics.IgnoreCollision(GetComponentInParent<BoxCollider>(), newProj.GetComponent<BoxCollider>());
         } else {
             Debug.LogError("Server-only RPC Shoot was called on a client!");
         }

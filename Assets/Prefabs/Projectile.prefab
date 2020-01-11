@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5202736712948167563}
   - component: {fileID: 5202736712948167560}
   - component: {fileID: 5202736712948167558}
-  - component: {fileID: 5202736712948167561}
+  - component: {fileID: 5757462170066860522}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -92,10 +92,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54838aeae431da74abeeeba0bacff394, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  texture: {fileID: 0}
   tempTextureData: 
   speed: 0.2
---- !u!64 &5202736712948167561
-MeshCollider:
+  tempOwnerNum: 0
+--- !u!65 &5757462170066860522
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -104,7 +106,6 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 2
+  m_Size: {x: 0.21167088, y: 0.25571203, z: 3.0616168e-17}
+  m_Center: {x: 0.002202034, y: -0.01101017, z: 1.5308084e-17}
