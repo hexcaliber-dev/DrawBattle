@@ -90,8 +90,6 @@ public class LobbyDots : LobbyDotsBehavior {
                     break;
             }
         }
-
-        print("SET " + dotNum + " TO " + newState);
     }
 
     public override void RemoveDot(RpcArgs args) {

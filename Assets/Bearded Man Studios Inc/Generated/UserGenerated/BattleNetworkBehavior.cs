@@ -4,11 +4,12 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"ownerNum\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\"][]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"ownerNum\"][]]")]
 	public abstract partial class BattleNetworkBehavior : NetworkBehavior
 	{
 		public const byte RPC_SPAWN_TANK = 0 + 5;
+		public const byte RPC_ASSIGN_MY_PLAYER = 1 + 5;
 		
 		public BattleNetworkNetworkObject networkObject = null;
 
@@ -23,6 +24,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("SpawnTank", SpawnTank, typeof(int));
+			networkObject.RegisterRpc("AssignMyPlayer", AssignMyPlayer);
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -104,6 +106,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// int ownerNum
 		/// </summary>
 		public abstract void SpawnTank(RpcArgs args);
+		/// <summary>
+		/// Arguments:
+		/// </summary>
+		public abstract void AssignMyPlayer(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

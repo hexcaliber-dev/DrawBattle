@@ -19,6 +19,8 @@ public class PlayerController : PlayerControllerBehavior {
         private Vector3 changeVector;
 
         public NetworkingPlayer owner;
+        public int playerNum;
+        
         // Start is called before the first frame update
         protected override void NetworkStart() {
             base.NetworkStart();
