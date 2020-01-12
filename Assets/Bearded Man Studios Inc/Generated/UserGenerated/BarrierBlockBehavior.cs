@@ -4,11 +4,10 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"damage\"]]")]
+	[GeneratedRPC("{\"types\":[]")]
+	[GeneratedRPCVariableNames("{\"types\":[]")]
 	public abstract partial class BarrierBlockBehavior : NetworkBehavior
 	{
-		public const byte RPC_DAMAGE_BLOCK = 0 + 5;
 		
 		public BarrierBlockNetworkObject networkObject = null;
 
@@ -22,7 +21,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("DamageBlock", DamageBlock, typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -99,11 +97,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
-		/// <summary>
-		/// Arguments:
-		/// int damage
-		/// </summary>
-		public abstract void DamageBlock(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

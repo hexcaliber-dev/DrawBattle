@@ -27,13 +27,13 @@ public class BarrierBlock : BarrierBlockBehavior {
         rend = GetComponent<Renderer>();
     }
 
-    // Client-only RPC
-    public override void DamageBlock(RpcArgs args) {
-        int damage = args.GetNext<int>();
+    public void DamageBlock(int damage) {
+        // int damage = args.GetNext<int>();
         health -= damage;
+        print("HEALTH: " + health);
         Color c = LobbyPlayer.PLAYER_COLOR_PRESETS[ownerNum - 1];
         ChangeColor(new Color(c.r, c.g, c.b, health / 100f));
-        if(health <= 0 && networkObject.IsOwner) {
+        if (health <= 0 && networkObject.IsOwner) {
             networkObject.Destroy();
         }
     }
@@ -47,12 +47,10 @@ public class BarrierBlock : BarrierBlockBehavior {
     }
 
     void OnCollisionEnter(Collision col) {
-        if (networkObject.IsOwner) {
-            print("COLLISION");
-            if (col.gameObject.tag == "Projectile" && col.gameObject.GetComponent<Projectile>().networkObject.ownerNum != ownerNum) {
-                networkObject.SendRpc(RPC_DAMAGE_BLOCK, Receivers.AllBuffered, col.gameObject.GetComponent<Projectile>().damage);
-                col.gameObject.GetComponent<Projectile>().networkObject.Destroy();
-            }
+        if (col.gameObject.tag == "Projectile" && col.gameObject.GetComponent<Projectile>().networkObject.ownerNum != ownerNum) {
+            // networkObject.SendRpc(RPC_DAMAGE_BLOCK, Receivers.All, col.gameObject.GetComponent<Projectile>().damage);
+            DamageBlock(col.gameObject.GetComponent<Projectile>().damage);
+            col.gameObject.GetComponent<Projectile>().networkObject.Destroy();
         }
     }
 

@@ -12,7 +12,7 @@ public class Projectile : ProjectileBehavior {
     public byte[] tempTextureData;
 
     public float speed = 1f;
-    public float damage = 10f;
+    public int damage = 10;
     public int tempOwnerNum = 0;
 
     bool initialized = false;

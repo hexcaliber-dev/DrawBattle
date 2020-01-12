@@ -23,6 +23,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			{
 				switch (identity)
 				{
+					case BarrierBlockNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new BarrierBlockNetworkObject(networker, id, frame);
+						break;
 					case BattleNetworkNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new BattleNetworkNetworkObject(networker, id, frame);
@@ -78,10 +82,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 					case TestNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new TestNetworkObject(networker, id, frame);
-						break;
-					case BarrierBlockNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new BarrierBlockNetworkObject(networker, id, frame);
 						break;
 				}
 
