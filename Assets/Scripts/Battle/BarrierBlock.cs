@@ -25,6 +25,7 @@ public class BarrierBlock : BarrierBlockBehavior {
     void Awake() {
         propBlock = new MaterialPropertyBlock();
         rend = GetComponent<Renderer>();
+
     }
 
     public void DamageBlock(int damage) {
