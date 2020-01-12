@@ -79,6 +79,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new TestNetworkObject(networker, id, frame);
 						break;
+					case BarrierBlockNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new BarrierBlockNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)

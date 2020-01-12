@@ -12,6 +12,7 @@ public class Projectile : ProjectileBehavior {
     public byte[] tempTextureData;
 
     public float speed = 1f;
+    public float damage = 10f;
     public int tempOwnerNum = 0;
 
     bool initialized = false;
@@ -29,7 +30,7 @@ public class Projectile : ProjectileBehavior {
 
     // Update is called once per frame
     void Update() {
-        if(networkObject != null) {
+        if (networkObject != null) {
             if (networkObject.IsOwner) {
                 transform.position += transform.up * speed;
                 networkObject.position = transform.position;
@@ -41,7 +42,7 @@ public class Projectile : ProjectileBehavior {
         }
 
         // Check for 2 conditions: temp values were assigned properly AND object is connected to network
-        if(!initialized && networkObject != null && tempOwnerNum > 0 && tempTextureData.Length > 0) {
+        if (!initialized && networkObject != null && tempOwnerNum > 0 && tempTextureData.Length > 0) {
             networkObject.ownerNum = tempOwnerNum;
             networkObject.SendRpc(RPC_INIT_PROJECTILE, Receivers.All, tempTextureData);
         }

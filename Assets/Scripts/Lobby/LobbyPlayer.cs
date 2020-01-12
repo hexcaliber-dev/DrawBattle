@@ -27,7 +27,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     public Sprite readyButtonSubmitted, readyButtonNormal;
 
     // Indices correspond with player numbers
-    readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
+    public static readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
