@@ -18,6 +18,8 @@ public class PlayerDraw : PlayerDrawBehavior {
     /// Used to keep track of mouseup/down events so we don't fill in the space between 2 points if there was a pen lift
     bool isDragging = false;
 
+    public bool canDraw = true;
+
     int completedPlayers = 0;
 
     ServerInfo serverInfo;
@@ -34,55 +36,59 @@ public class PlayerDraw : PlayerDrawBehavior {
     private void Update() {
 
         // Pencil/eraser switching
-        if(Input.GetKeyDown(KeyCode.P)) {
+        if (Input.GetKeyDown(KeyCode.P)) {
             SetEraserEnabled(false);
         }
-        if(Input.GetKeyDown(KeyCode.E)) {
+        if (Input.GetKeyDown(KeyCode.E)) {
             SetEraserEnabled(true);
         }
 
-        // Need to keep track of dragging to make sure lerping isn't done between penup/pendown
-        if (Input.GetMouseButtonUp(0)) isDragging = false;
+        if (canDraw) {
 
-        if (Input.GetMouseButton(0)) {
+            // Need to keep track of dragging to make sure lerping isn't done between penup/pendown
+            if (Input.GetMouseButtonUp(0)) isDragging = false;
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Input.GetMouseButton(0)) {
 
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) {
-                var pallet = hit.collider.GetComponent<PaintCanvas>();
-                if (pallet != null) {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-                    // Check to make sure the canvas was clicked
-                    Renderer rend = hit.transform.GetComponent<Renderer>();
-                    MeshCollider meshCollider = hit.collider as MeshCollider;
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit)) {
+                    var pallet = hit.collider.GetComponent<PaintCanvas>();
+                    if (pallet != null) {
 
-                    if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-                        return;
+                        // Check to make sure the canvas was clicked
+                        Renderer rend = hit.transform.GetComponent<Renderer>();
+                        MeshCollider meshCollider = hit.collider as MeshCollider;
 
-                    Texture2D tex = rend.material.mainTexture as Texture2D;
-                    Vector2 pixelUV = hit.textureCoord;
+                        if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
+                            return;
 
-                    pixelUV.x *= tex.width;
-                    pixelUV.y *= tex.height;
+                        Texture2D tex = rend.material.mainTexture as Texture2D;
+                        Vector2 pixelUV = hit.textureCoord;
 
-                    Color currColor = new Color(0, 0, 0, 0);
+                        pixelUV.x *= tex.width;
+                        pixelUV.y *= tex.height;
 
-                    if (!eraserEnabled)
-                        currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
+                        Color currColor = new Color(0, 0, 0, 0);
 
-                    int currSize = GameObject.FindObjectOfType<BrushPicker>().brushSize;
-                    if (!isDragging)
+                        if (!eraserEnabled)
+                            currColor = GameObject.FindObjectOfType<ColorPicker>().currColor;
+
+                        int currSize = GameObject.FindObjectOfType<BrushPicker>().brushSize;
+                        if (!isDragging)
+                            prevPos = pixelUV;
+                        else
+                            paintCanvas.ColorBetween(prevPos, pixelUV, currColor, currSize);
+
+                        paintCanvas.BrushAreaWithColor(pixelUV, currColor, currSize);
                         prevPos = pixelUV;
-                    else
-                        paintCanvas.ColorBetween(prevPos, pixelUV, currColor, currSize);
-
-                    paintCanvas.BrushAreaWithColor(pixelUV, currColor, currSize);
-                    prevPos = pixelUV;
-                    isDragging = true;
+                        isDragging = true;
+                    }
                 }
             }
         }
+
     }
 
     // Deprecated, use SendDrawingComplete() instead
@@ -118,6 +124,13 @@ public class PlayerDraw : PlayerDrawBehavior {
 
             // Update button
             submitButton.image.sprite = submittedImg;
+
+            // Update dot
+            GameObject.FindObjectOfType<LobbyDots>().networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 1);
+
+            // Disable drawing
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            canDraw = false;
         }
     }
 

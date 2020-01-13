@@ -18,6 +18,8 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     /// Used to keep track of mouseup/down events so we don't fill in the space between 2 points if there was a pen lift
     bool isDragging = false;
 
+    public bool canDraw = true;
+
     int readyPlayers = 0;
 
     ServerInfo serverInfo;
@@ -36,60 +38,62 @@ public class LobbyPlayer : LobbyPlayerBehavior {
 
     private void Update() {
 
-        // Need to keep track of dragging to make sure lerping isn't done between penup/pendown
-        if (Input.GetMouseButtonUp(0)) isDragging = false;
+        if (canDraw) {
+            // Need to keep track of dragging to make sure lerping isn't done between penup/pendown
+            if (Input.GetMouseButtonUp(0)) isDragging = false;
 
-        if (Input.GetMouseButton(0)) {
+            if (Input.GetMouseButton(0)) {
 
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit)) {
-                var pallet = hit.collider.GetComponent<LobbyCanvas>();
-                if (pallet != null) {
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit)) {
+                    var pallet = hit.collider.GetComponent<LobbyCanvas>();
+                    if (pallet != null) {
 
-                    // Check to make sure the canvas was clicked
-                    Renderer rend = hit.transform.GetComponent<Renderer>();
-                    MeshCollider meshCollider = hit.collider as MeshCollider;
+                        // Check to make sure the canvas was clicked
+                        Renderer rend = hit.transform.GetComponent<Renderer>();
+                        MeshCollider meshCollider = hit.collider as MeshCollider;
 
-                    if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
-                        return;
+                        if (rend == null || rend.sharedMaterial == null || rend.sharedMaterial.mainTexture == null || meshCollider == null)
+                            return;
 
-                    Texture2D tex = rend.material.mainTexture as Texture2D;
-                    Vector2 pixelUV = hit.textureCoord;
+                        Texture2D tex = rend.material.mainTexture as Texture2D;
+                        Vector2 pixelUV = hit.textureCoord;
 
-                    pixelUV.x *= tex.width;
-                    pixelUV.y *= tex.height;
+                        pixelUV.x *= tex.width;
+                        pixelUV.y *= tex.height;
 
-                    if (!isDragging)
-                        prevPos = pixelUV;
-                    else {
-                        // ColorBetween behavior
-                        // Get the distance from start to finish
-                        float distance = Vector2.Distance(prevPos, pixelUV);
-                        Vector2 direction = (prevPos - pixelUV).normalized;
+                        if (!isDragging)
+                            prevPos = pixelUV;
+                        else {
+                            // ColorBetween behavior
+                            // Get the distance from start to finish
+                            float distance = Vector2.Distance(prevPos, pixelUV);
+                            Vector2 direction = (prevPos - pixelUV).normalized;
 
-                        Vector2 cur_position = prevPos;
+                            Vector2 cur_position = prevPos;
 
-                        // Calculate how many times we should interpolate between prevPos and pixelUV based on the amount of time that has passed since the last update
-                        float lerp_steps = 1 / distance * LobbyCanvas.BRUSH_SIZE;
+                            // Calculate how many times we should interpolate between prevPos and pixelUV based on the amount of time that has passed since the last update
+                            float lerp_steps = 1 / distance * LobbyCanvas.BRUSH_SIZE;
 
-                        for (float lerp = 0; lerp <= 1; lerp += lerp_steps) {
-                            cur_position = Vector2.Lerp(prevPos, pixelUV, lerp);
-                            lobbyCanvas.BrushAreaWithColor(cur_position, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
+                            for (float lerp = 0; lerp <= 1; lerp += lerp_steps) {
+                                cur_position = Vector2.Lerp(prevPos, pixelUV, lerp);
+                                lobbyCanvas.BrushAreaWithColor(cur_position, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
 
-                            if (networkObject != null)
-                                networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
+                                if (networkObject != null)
+                                    networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
+                            }
                         }
+
+                        lobbyCanvas.BrushAreaWithColor(pixelUV, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
+
+                        if (networkObject != null)
+                            networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, pixelUV);
+
+                        prevPos = pixelUV;
+                        isDragging = true;
                     }
-
-                    lobbyCanvas.BrushAreaWithColor(pixelUV, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
-
-                    if (networkObject != null)
-                        networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, pixelUV);
-
-                    prevPos = pixelUV;
-                    isDragging = true;
                 }
             }
         }
