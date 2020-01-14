@@ -83,6 +83,10 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new TestNetworkObject(networker, id, frame);
 						break;
+					case TimerNetworkObject.IDENTITY:
+						availableCallback = true;
+						obj = new TimerNetworkObject(networker, id, frame);
+						break;
 				}
 
 				if (!availableCallback)

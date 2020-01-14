@@ -1147,7 +1147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -203.163}
   m_AnchorMin: {x: 0.7898558, y: 0.67600006}
   m_AnchorMax: {x: 0.97912645, y: 0.9683651}
-  m_AnchoredPosition: {x: -9.400002, y: -19.399994}
+  m_AnchoredPosition: {x: -9.400024, y: -19.399994}
   m_SizeDelta: {x: 22.600006, y: 27.600006}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &371710342
@@ -1638,7 +1638,7 @@ GameObject:
   - component: {fileID: 579748677}
   - component: {fileID: 579748676}
   m_Layer: 5
-  m_Name: Countdown
+  m_Name: Timer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

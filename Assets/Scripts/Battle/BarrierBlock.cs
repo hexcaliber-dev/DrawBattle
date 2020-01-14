@@ -16,6 +16,7 @@ public class BarrierBlock : BarrierBlockBehavior {
     Renderer rend;
 
     protected override void NetworkStart() {
+        base.NetworkStart();
         if (ownerNum != 0) {
             ChangeColor(LobbyPlayer.PLAYER_COLOR_PRESETS[ownerNum - 1]);
         } else
