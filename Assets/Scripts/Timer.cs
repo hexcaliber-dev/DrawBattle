@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,6 +15,8 @@ public class Timer : TimerBehavior {
 
     [SerializeField]
     Text timerText;
+    [SerializeField]
+    Image fillImg;
 
     IEnumerator currCountdown;
 
@@ -51,6 +54,11 @@ public class Timer : TimerBehavior {
         }
 
         networkObject.timeRemaining = startingTime;
+
+        // Do the fill animation
+        fillImg.fillAmount = 0;
+        DOTween.To(() => fillImg.fillAmount, x => fillImg.fillAmount = x, 1, startingTime).SetEase(Ease.Linear);
+
         if (ServerInfo.isServer) {
             while (networkObject.timeRemaining > 0) {
                 networkObject.timeRemaining--;
