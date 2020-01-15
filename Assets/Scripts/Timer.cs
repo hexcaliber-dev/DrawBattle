@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class Timer : TimerBehavior {
 
     // Amount of time given to each phase (MAINMENU, LOBBY, DRAW, BATTLE, VOTE). -1 means this phase is untimed.
-    static readonly int[] STARTING_TIMES = {-1, -1, 30, 60, 30 };
+    static readonly int[] STARTING_TIMES = {-1, -1, 3, 3, 3 };
 
     [SerializeField]
     Text timerText;
@@ -66,14 +66,26 @@ public class Timer : TimerBehavior {
             }
         }
         currCountdown = null;
-        if (buildIndex == (int) ServerInfo.GamePhase.Drawing) {
-            if (networkObject != null) {
-                // Send drawing to server
-                GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
 
-                // Save drawing locally
-                byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
-                PlayerShoot.textureData = textureData;
+        if (networkObject != null) {
+
+            switch (buildIndex) {
+                case (int) ServerInfo.GamePhase.Drawing:
+                    // Send drawing to server
+                    GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
+                    // Save drawing locally
+                    byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
+                    PlayerShoot.textureData = textureData;
+                    break;
+
+                case (int) ServerInfo.GamePhase.Battling:
+                    SceneManager.LoadScene(4);
+                    break;
+
+                case (int) ServerInfo.GamePhase.Voting:
+                    PlayerDraw.currDrawing++;
+                    SceneManager.LoadScene(2);
+                    break;
             }
         }
     }

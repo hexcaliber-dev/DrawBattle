@@ -10,27 +10,29 @@ using UnityEngine.UI;
 /// Player brush behavior on the drawing phase. IS a networkObject!
 public class PlayerDraw : PlayerDrawBehavior {
 
+    ServerInfo serverInfo;
     public PaintCanvas paintCanvas;
 
     /// Last frame's mouse position. Used for lerping
     Vector2 prevPos;
-
     /// Used to keep track of mouseup/down events so we don't fill in the space between 2 points if there was a pen lift
     bool isDragging = false;
-
     public bool canDraw = true;
-
     int completedPlayers = 0;
-
-    ServerInfo serverInfo;
-
     public bool eraserEnabled = false;
+
     public Sprite penEnabledImg, penDisabledImg, eraserEnabledImg, eraserDisabledImg, submittedImg;
     public Button penButton, eraserButton;
     public Button submitButton;
+    public Text infoText;
+
+    /// What the player is currently drawing. 0-homebase, 1-projectile, 2-tankbase, 3-tanktop, 4-barriers
+    public static int currDrawing = 0;
+    static readonly string[] drawingNames = {"home base", "projectile", "tank base", "tank head", "barrier blocks"};
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
+        infoText.text = "Draw your " + drawingNames[currDrawing];
     }
 
     private void Update() {
