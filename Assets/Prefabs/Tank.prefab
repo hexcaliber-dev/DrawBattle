@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 2030197361}
   - component: {fileID: -5742120995934583609}
   - component: {fileID: -1200386411638098651}
+  - component: {fileID: 889230733452349630}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Player
@@ -187,6 +188,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 3
+--- !u!114 &889230733452349630
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3054468305140883136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83217e947f2caed4ca4b93ad607d624a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawingType: 2
 --- !u!1 &7857073116690295969
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,6 +212,7 @@ GameObject:
   - component: {fileID: 5771546306489579962}
   - component: {fileID: 742341557197734582}
   - component: {fileID: 8314177316367033682}
+  - component: {fileID: 6313519141045973649}
   m_Layer: 0
   m_Name: TankHeadAsset
   m_TagString: Untagged
@@ -265,3 +280,16 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7857073116690295969}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6313519141045973649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7857073116690295969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83217e947f2caed4ca4b93ad607d624a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawingType: 3

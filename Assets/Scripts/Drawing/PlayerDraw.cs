@@ -28,7 +28,8 @@ public class PlayerDraw : PlayerDrawBehavior {
 
     /// What the player is currently drawing. 0-homebase, 1-projectile, 2-tankbase, 3-tanktop, 4-barriers
     public static int currDrawing = 0;
-    static readonly string[] drawingNames = {"home base", "projectile", "tank base", "tank head", "barrier blocks"};
+    public static readonly string[] drawingNames = { "home base", "projectile", "tank base", "tank head", "barrier blocks" };
+    public enum Drawings { HomeBase, Projectile, TankBase, TankHead, BarrierBlock }
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
@@ -122,7 +123,7 @@ public class PlayerDraw : PlayerDrawBehavior {
 
             // Save drawing locally
             byte[] textureData = paintCanvas.GetAllTextureData().Compress();
-            PlayerShoot.textureData = textureData;
+            DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
 
             // Update button
             submitButton.image.sprite = submittedImg;

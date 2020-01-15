@@ -4,12 +4,13 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[]")]
-	[GeneratedRPCVariableNames("{\"types\":[]")]
-	public abstract partial class ProjectileBehavior : NetworkBehavior
+	[GeneratedRPC("{\"types\":[[\"byte[]\", \"int\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"textureData\", \"owner\"]]")]
+	public abstract partial class DrawableTextureBehavior : NetworkBehavior
 	{
+		public const byte RPC_SEND_TEXTURE = 0 + 5;
 		
-		public ProjectileNetworkObject networkObject = null;
+		public DrawableTextureNetworkObject networkObject = null;
 
 		public override void Initialize(NetworkObject obj)
 		{
@@ -17,10 +18,11 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			if (networkObject != null && networkObject.AttachedBehavior != null)
 				return;
 			
-			networkObject = (ProjectileNetworkObject)obj;
+			networkObject = (DrawableTextureNetworkObject)obj;
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
+			networkObject.RegisterRpc("SendTexture", SendTexture, typeof(byte[]), typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -78,7 +80,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override void Initialize(NetWorker networker, byte[] metadata = null)
 		{
-			Initialize(new ProjectileNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
+			Initialize(new DrawableTextureNetworkObject(networker, createCode: TempAttachCode, metadata: metadata));
 		}
 
 		private void DestroyGameObject(NetWorker sender)
@@ -89,7 +91,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		public override NetworkObject CreateNetworkObject(NetWorker networker, int createCode, byte[] metadata = null)
 		{
-			return new ProjectileNetworkObject(networker, this, createCode, metadata);
+			return new DrawableTextureNetworkObject(networker, this, createCode, metadata);
 		}
 
 		protected override void InitializedTransform()
@@ -97,6 +99,12 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.SnapInterpolations();
 		}
 
+		/// <summary>
+		/// Arguments:
+		/// byte[] textureData
+		/// int owner
+		/// </summary>
+		public abstract void SendTexture(RpcArgs args);
 
 		// DO NOT TOUCH, THIS GETS GENERATED PLEASE EXTEND THIS CLASS IF YOU WISH TO HAVE CUSTOM CODE ADDITIONS
 	}

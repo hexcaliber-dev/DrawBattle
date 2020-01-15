@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"byte[]\", \"int\"]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"textureData\", \"ownerNum\"]]")]
+	[GeneratedRPC("{\"types\":[[\"int\"]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"ownerNum\"]]")]
 	public abstract partial class PlayerShootBehavior : NetworkBehavior
 	{
 		public const byte RPC_SHOOT = 0 + 5;
@@ -22,7 +22,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 			networkObject.AttachedBehavior = this;
 
 			base.SetupHelperRpcs(networkObject);
-			networkObject.RegisterRpc("Shoot", Shoot, typeof(byte[]), typeof(int));
+			networkObject.RegisterRpc("Shoot", Shoot, typeof(int));
 
 			networkObject.onDestroy += DestroyGameObject;
 
@@ -101,7 +101,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 		/// <summary>
 		/// Arguments:
-		/// byte[] textureData
 		/// int ownerNum
 		/// </summary>
 		public abstract void Shoot(RpcArgs args);

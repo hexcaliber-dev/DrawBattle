@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2134415434956006441}
   - component: {fileID: 2134415434956006442}
   - component: {fileID: 2134415434956006443}
+  - component: {fileID: 3030163940081167330}
   m_Layer: 0
   m_Name: HomeBase
   m_TagString: Untagged
@@ -113,7 +114,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10756, guid: 0000000000000000e000000000000000, type: 0}
+  - {fileID: 2100000, guid: 7a4964a5add84124cad3403633645cd2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -142,6 +143,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2134415434956006452}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &3030163940081167330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2134415434956006452}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83217e947f2caed4ca4b93ad607d624a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawingType: 0
 --- !u!1001 &2134415434761903669
 PrefabInstance:
   m_ObjectHideFlags: 0

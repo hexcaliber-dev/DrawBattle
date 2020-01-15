@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class Timer : TimerBehavior {
 
     // Amount of time given to each phase (MAINMENU, LOBBY, DRAW, BATTLE, VOTE). -1 means this phase is untimed.
-    static readonly int[] STARTING_TIMES = {-1, -1, 3, 3, 3 };
+    static readonly int[] STARTING_TIMES = {-1, -1, 3, 10, 3 };
 
     [SerializeField]
     Text timerText;
@@ -75,7 +75,7 @@ public class Timer : TimerBehavior {
                     GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
                     // Save drawing locally
                     byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
-                    PlayerShoot.textureData = textureData;
+                    DrawableTexture.textures[(int)PlayerDraw.currDrawing] = textureData;
                     break;
 
                 case (int) ServerInfo.GamePhase.Battling:

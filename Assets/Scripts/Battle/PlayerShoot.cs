@@ -8,7 +8,6 @@ using UnityEngine;
 /// Manages shooting behavior of Projectiles
 public class PlayerShoot : PlayerShootBehavior {
 
-    public static byte[] textureData;
     // Start is called before the first frame update
     void Start() {
 
@@ -18,19 +17,17 @@ public class PlayerShoot : PlayerShootBehavior {
     void Update() {
         // Only clients can send shoot requests for their own tank
         if (Input.GetKeyDown(KeyCode.Space) && GetComponentInParent<PlayerController>().networkObject.IsOwner && ServerInfo.playerNum > 0) {
-            networkObject.SendRpc(RPC_SHOOT, Receivers.Server, textureData, ServerInfo.playerNum);
+            networkObject.SendRpc(RPC_SHOOT, Receivers.Server, ServerInfo.playerNum);
         }
     }
 
     // Server only RPC
     public override void Shoot(RpcArgs args) {
         if (ServerInfo.isServer) {
-            byte[] texture = args.GetNext<byte[]>();
             int ownerNum = args.GetNext<int>();
             Projectile newProj = NetworkManager.Instance.InstantiateProjectile(0, transform.position, transform.rotation) as Projectile;
             // Set projectile data, to be used for NetworkStart
             newProj.tempOwnerNum = ownerNum;
-            newProj.tempTextureData = texture;
             Physics.IgnoreCollision(GetComponentInParent<BoxCollider>(), newProj.GetComponent<BoxCollider>());
         } else {
             Debug.LogError("Server-only RPC Shoot was called on a client!");
