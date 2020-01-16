@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class PlayerStats : MonoBehaviour {
 
@@ -49,5 +50,9 @@ public class PlayerStats : MonoBehaviour {
 
     public int GetPlayerNum() {
         return GetComponent<PlayerController>().playerNum;
+    }
+
+    public static PlayerStats getPlayerStatsFromNumber(int playerNum) {
+        return GameObject.FindObjectsOfType<PlayerStats>().Where((player) => (player.GetPlayerNum() == playerNum)).First();
     }
 }

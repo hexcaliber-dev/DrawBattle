@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Projectile
   - Barrier
+  - HomeBase
   layers:
   - Default
   - TransparentFX

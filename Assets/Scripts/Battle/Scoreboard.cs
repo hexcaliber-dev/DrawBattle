@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class Scoreboard : MonoBehaviour {
     ScoreboardEntry[] entries;
     PlayerStats[] players;
+
+    public Text myTankHealth, myBaseHealth;
+    public Image myTankImg, myBaseImg;
+    PlayerStats myPlayer;
 
     // Start is called before the first frame update
     void Start() {
@@ -14,25 +19,36 @@ public class Scoreboard : MonoBehaviour {
 
     public void InitScoreboard() {
         players = GameObject.FindObjectsOfType<PlayerStats>();
-        for(int i = 1; i < entries.Length; i++) {
-            if(i >= players.Length)
+        for (int i = 1; i < entries.Length; i++) {
+            if (i >= players.Length)
                 entries[i].gameObject.SetActive(false);
         }
+
+        foreach (PlayerStats player in players) {
+            if (player.GetPlayerNum() == ServerInfo.playerNum)
+                myPlayer = player;
+        }
+
+        myTankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];
+        myBaseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];
         StartCoroutine(SortEntriesPeriodically());
     }
 
     // Update is called once per frame
     void Update() {
-
+        if(myPlayer != null) {
+            myTankHealth.text = myPlayer.tankHealth.ToString();
+            myBaseHealth.text = myPlayer.baseHealth.ToString();
+        }
     }
 
     // Sorts players by base health, descending
     // Interval = seconds in between updates
     IEnumerator SortEntriesPeriodically(float interval = 1f) {
-        while(true) {
+        while (true) {
             List<PlayerStats> sortedPlayers = players.OfType<PlayerStats>().ToList();
-            sortedPlayers.Sort((a,b) => (a.baseHealth.CompareTo(b.baseHealth)));
-            for(int i = 0; i < sortedPlayers.Count; i++) {
+            sortedPlayers.Sort((a, b) => (a.baseHealth.CompareTo(b.baseHealth)));
+            for (int i = 0; i < sortedPlayers.Count; i++) {
                 entries[i].UpdateEntry(sortedPlayers[i]);
             }
             yield return new WaitForSeconds(interval);
