@@ -18,7 +18,7 @@ public class BarrierBlock : BarrierBlockBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
         if (ownerNum != 0) {
-            ChangeColor(LobbyPlayer.PLAYER_COLOR_PRESETS[ownerNum - 1]);
+            ChangeColor(ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1]);
         } else
             Debug.LogError("BarrierBlock owner was set to 0!");
     }
@@ -33,7 +33,7 @@ public class BarrierBlock : BarrierBlockBehavior {
         // int damage = args.GetNext<int>();
         health -= damage;
         print("HEALTH: " + health);
-        Color c = LobbyPlayer.PLAYER_COLOR_PRESETS[ownerNum - 1];
+        Color c = ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1];
         ChangeColor(new Color(c.r, c.g, c.b, health / 100f));
         if (health <= 0 && networkObject.IsOwner) {
             networkObject.Destroy();

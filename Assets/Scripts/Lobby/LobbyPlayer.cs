@@ -28,9 +28,6 @@ public class LobbyPlayer : LobbyPlayerBehavior {
     public Button readyButton;
     public Sprite readyButtonSubmitted, readyButtonNormal;
 
-    // Indices correspond with player numbers
-    public static readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
-
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
         lobbyDots = GameObject.FindObjectOfType<LobbyDots>();
@@ -79,14 +76,14 @@ public class LobbyPlayer : LobbyPlayerBehavior {
 
                             for (float lerp = 0; lerp <= 1; lerp += lerp_steps) {
                                 cur_position = Vector2.Lerp(prevPos, pixelUV, lerp);
-                                lobbyCanvas.BrushAreaWithColor(cur_position, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
+                                lobbyCanvas.BrushAreaWithColor(cur_position, ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
 
                                 if (networkObject != null)
                                     networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, cur_position);
                             }
                         }
 
-                        lobbyCanvas.BrushAreaWithColor(pixelUV, PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
+                        lobbyCanvas.BrushAreaWithColor(pixelUV, ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1]);
 
                         if (networkObject != null)
                             networkObject.SendRpc(RPC_DRAW, Receivers.AllBuffered, ServerInfo.playerNum, pixelUV);
@@ -101,7 +98,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
 
     // (All-instance RPC) A player requested to draw something at this spot
     public override void Draw(RpcArgs args) {
-        Color color = PLAYER_COLOR_PRESETS[args.GetNext<int>() - 1];
+        Color color = ServerInfo.PLAYER_COLOR_PRESETS[args.GetNext<int>() - 1];
         Vector2 pos = args.GetNext<Vector2>();
         lobbyCanvas.BrushAreaWithColor(pos, color);
     }

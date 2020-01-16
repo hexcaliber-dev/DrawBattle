@@ -25,7 +25,6 @@ public class DrawableTexture : DrawableTextureBehavior {
 
     void Start() {
         if (textures[(int) drawingType] != null) {
-            print(drawingType);
             texture = (Texture2D) GameObject.Instantiate(GetComponent<Renderer>().material.mainTexture);
             GetComponent<Renderer>().material.mainTexture = texture;
             InitDrawableTexture(textures[(int)drawingType], ServerInfo.playerNum);

@@ -27,6 +27,9 @@ public class ServerInfo : ServerInfoBehavior {
     // Set to true when player quits on purpose
     public static bool expectingQuit = false;
 
+    // Indices correspond with player numbers
+    public static readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
+
     // Used to keep track of game states. Each value corresponds to a scene index
     public enum GamePhase { None, Lobbying, Drawing, Battling, Voting }
 

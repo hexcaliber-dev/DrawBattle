@@ -36,6 +36,7 @@ public class PlayerController : PlayerControllerBehavior {
                 print("Found player");
             }
         }
+        GameObject.FindObjectOfType<Scoreboard>().InitScoreboard();
     }
 
     void FixedUpdate() {
