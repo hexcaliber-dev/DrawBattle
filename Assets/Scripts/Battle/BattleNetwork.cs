@@ -30,12 +30,8 @@ public class BattleNetwork : BattleNetworkBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
 
-        // // Init homebase
-        // foreach (GameObject homeBase in GameObject.FindGameObjectsWithTag("HomeBase")) {
-        //     if (homeBase.GetComponent<DrawableTexture>().ownerNum == ServerInfo.playerNum) {
-        //         homeBase.GetComponent<DrawableTexture>().networkObject.SendRpc(DrawableTextureBehavior.RPC_SEND_TEXTURE, Receivers.All, DrawableTexture.textures[(int)PlayerDraw.Drawings.HomeBase], ServerInfo.playerNum);
-        //     }
-        // }
+        // Init homebase
+        NetworkManager.Instance.InstantiateHomeBase(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity);
 
         // Spawn tank
         PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity) as PlayerController;

@@ -43,22 +43,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbe5b082a785e7641bf1a62b930a3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BarrierBlockNetworkObject: []
   BattleNetworkNetworkObject: []
   ChatManagerNetworkObject:
   - {fileID: 1000012032569418, guid: b454b1be0b2c3fa4fb48430867af7566, type: 3}
   CubeForgeGameNetworkObject: []
+  DrawableTextureNetworkObject: []
   ExampleProximityPlayerNetworkObject:
   - {fileID: 1000012738253334, guid: feb25ecf90a8d8b4ab922a455249997b, type: 3}
+  LobbyDotsNetworkObject: []
+  LobbyPlayerNetworkObject: []
   NetworkCameraNetworkObject:
   - {fileID: 139536, guid: 661f29f0c0c86fa47b6015bd602d0ac6, type: 3}
   PlayerControllerNetworkObject:
   - {fileID: 3054468305140883136, guid: e1857114a73150c46b174d7dfd4fbcfd, type: 3}
   PlayerDrawNetworkObject: []
-  PlayerObjNetworkObject:
-  - {fileID: 5754918036913639203, guid: 081ccd9e2604bda499b80f3d2fb28bf5, type: 3}
-  - {fileID: 5754918036913639203, guid: 8c2052d8e14e7d44e9546611d2c7ce4f, type: 3}
   ProjectileNetworkObject:
   - {fileID: 5202736712948167559, guid: 5919779a6902eb3419416905c77bb509, type: 3}
   ServerInfoNetworkObject: []
   TestNetworkObject: []
+  TimerNetworkObject: []
+  HomeBaseNetworkObject:
+  - {fileID: 2134415434956006452, guid: 5c8c7564f7a4d3648a1b490fd242041e, type: 3}
   automaticScenes: 1

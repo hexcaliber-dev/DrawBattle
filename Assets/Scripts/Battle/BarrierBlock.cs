@@ -46,6 +46,10 @@ public class BarrierBlock : BarrierBlockBehavior {
         rend.SetPropertyBlock(propBlock);
     }
 
+    public void ResetColor() {
+        ChangeColor(ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1]);
+    }
+
     void OnCollisionEnter(Collision col) {
         if (col.gameObject.tag == "Projectile" && col.gameObject.GetComponent<Projectile>().networkObject.ownerNum != ownerNum) {
             // networkObject.SendRpc(RPC_DAMAGE_BLOCK, Receivers.All, col.gameObject.GetComponent<Projectile>().damage);

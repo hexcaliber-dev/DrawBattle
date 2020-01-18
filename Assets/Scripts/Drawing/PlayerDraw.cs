@@ -39,12 +39,7 @@ public class PlayerDraw : PlayerDrawBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
         if (ServerInfo.isServer)
-            StartCoroutine(delaySwitch());
-    }
-
-    IEnumerator delaySwitch() {
-        yield return new WaitForSeconds(0.5f);
-        GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_SWITCH_TO_NEXT_DRAWING, Receivers.All);
+            GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_SWITCH_TO_NEXT_DRAWING, Receivers.All);
     }
 
     private void Update() {
