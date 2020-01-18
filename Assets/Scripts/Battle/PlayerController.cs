@@ -19,7 +19,6 @@ public class PlayerController : PlayerControllerBehavior {
     private Vector3 changeVector;
 
     public NetworkingPlayer owner;
-    public int playerNum;
 
     // Start is called before the first frame update
     protected override void NetworkStart() {
@@ -31,7 +30,7 @@ public class PlayerController : PlayerControllerBehavior {
         // networkObject.AssignOwnership(owner);
         // Let player pass through their own base
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Barrier")) {
-            if (obj.GetComponent<BarrierBlock>().ownerNum == playerNum) {
+            if (obj.GetComponent<BarrierBlock>().ownerNum == networkObject.playerNum) {
                 Physics.IgnoreCollision(obj.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
             }
         }
@@ -47,7 +46,7 @@ public class PlayerController : PlayerControllerBehavior {
         // Shooting
         if (Input.GetKeyDown(KeyCode.Space) && GetComponentInParent<PlayerController>().networkObject.IsOwner && ServerInfo.playerNum > 0) {
             Projectile newProj = NetworkManager.Instance.InstantiateProjectile(0, transform.position, transform.rotation) as Projectile;
-            newProj.tempOwnerNum = playerNum;
+            newProj.tempOwnerNum = networkObject.playerNum;
             Physics.IgnoreCollision(GetComponentInParent<BoxCollider>(), newProj.GetComponent<BoxCollider>());
         }
     }

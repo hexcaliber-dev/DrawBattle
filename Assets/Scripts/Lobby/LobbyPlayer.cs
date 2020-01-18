@@ -112,7 +112,7 @@ public class LobbyPlayer : LobbyPlayerBehavior {
             readyPlayers += valToAdd;
 
             if (readyPlayers == serverInfo.networkObject.numPlayers) {
-                serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Drawing);
+                ServerInfo.ChangePhase(ServerInfo.GamePhase.Drawing);
             }
         } else {
             Debug.LogError("Server-only RPC PlayerReady was called on a client!");

@@ -52,40 +52,43 @@ public class Timer : TimerBehavior {
 
     // Should be run on server only
     IEnumerator CountDown(int startingTime, int buildIndex) {
-        if (startingTime < 0) {
-            Debug.LogError("CountDown called with starting time of -1!");
-        }
-
-        networkObject.timeRemaining = startingTime;
-
         if (ServerInfo.isServer) {
+            if (startingTime < 0) {
+                Debug.LogError("CountDown called with starting time of -1!");
+            }
+
+            networkObject.timeRemaining = startingTime;
+
             while (networkObject.timeRemaining > 0) {
                 networkObject.timeRemaining--;
                 yield return new WaitForSeconds(1f);
             }
-        }
-        currCountdown = null;
 
-        if (networkObject != null) {
+            currCountdown = null;
 
-            switch (buildIndex) {
-                case (int) ServerInfo.GamePhase.Drawing:
-                    // Send drawing to server
-                    GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
-                    // Save drawing locally
-                    byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
-                    DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
-                    break;
+            if (networkObject != null) {
 
-                case (int) ServerInfo.GamePhase.Battling:
-                    SceneManager.LoadScene(4);
-                    break;
+                switch (buildIndex) {
+                    case (int) ServerInfo.GamePhase.Drawing:
+                        // Send drawing to server
+                        GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
+                        // Save drawing locally
+                        byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
+                        DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
+                        break;
 
-                case (int) ServerInfo.GamePhase.Voting:
-                    // PlayerDraw.currDrawing++; done in NetworkStart in PlayerDraw
-                    SceneManager.LoadScene(2);
-                    break;
+                    case (int) ServerInfo.GamePhase.Battling:
+                        ServerInfo.ChangePhase(ServerInfo.GamePhase.Voting);
+                        break;
+
+                    case (int) ServerInfo.GamePhase.Voting:
+                        // PlayerDraw.currDrawing++; done in NetworkStart in PlayerDraw
+                        ServerInfo.ChangePhase(ServerInfo.GamePhase.Drawing);
+                        break;
+                }
             }
+        } else {
+            Debug.LogError("CountDown was called on a client!!");
         }
     }
 }

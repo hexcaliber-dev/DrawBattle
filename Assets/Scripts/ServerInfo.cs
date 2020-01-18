@@ -31,9 +31,10 @@ public class ServerInfo : ServerInfoBehavior {
     public static readonly Color[] PLAYER_COLOR_PRESETS = { Color.red, Color.yellow, Color.green, Color.blue };
 
     // Used to keep track of game states. Each value corresponds to a scene index
-    public enum GamePhase { None, Lobbying, Drawing, Battling, Voting }
+    public enum GamePhase { MainMenu, Lobbying, Drawing, Battling, Voting }
 
-    public GamePhase currPhase = GamePhase.None;
+    // Current game phase. Use ChangePhase() to edit it.
+    public static GamePhase currPhase = GamePhase.MainMenu;
 
     // Custom pen cursor
     public Texture2D cursorTexture;
@@ -81,8 +82,7 @@ public class ServerInfo : ServerInfoBehavior {
                     print("Closing server...");
                 } else {
                     print("All players have left! Restarting server...");
-                    currPhase = GamePhase.Lobbying;
-                    SceneManager.LoadScene(1);
+                    ChangePhase(GamePhase.Lobbying);
                 }
             }
         }
@@ -99,9 +99,9 @@ public class ServerInfo : ServerInfoBehavior {
         lobbyDots.networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, networkObject.numPlayers - 1, 1);
     }
 
-    // All instance RPC
-    public override void ChangePhase(RpcArgs args) {
-        currPhase = (GamePhase) (args.GetNext<int>());
+    // Run on server only. This will update for all clients
+    public static void ChangePhase(GamePhase newPhase) {
+        currPhase = newPhase;
         print("Changing to " + currPhase.ToString() + " phase");
         SceneManager.LoadScene((int) currPhase);
     }

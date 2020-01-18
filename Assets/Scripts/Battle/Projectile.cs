@@ -4,7 +4,7 @@ using BeardedManStudios.Forge.Networking;
 using BeardedManStudios.Forge.Networking.Generated;
 using UnityEngine;
 
-// The stuff that gets shot from tanks. Instantiation is controlled by PlayerShoot
+// The stuff that gets shot from tanks. Instantiation is controlled by PlayerController
 public class Projectile : ProjectileBehavior {
 
     public float speed = 1f;

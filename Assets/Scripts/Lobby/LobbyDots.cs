@@ -40,7 +40,7 @@ public class LobbyDots : LobbyDotsBehavior {
 
     protected override void NetworkStart() {
         base.NetworkStart();
-        if (ServerInfo.isServer && SceneManager.GetActiveScene().buildIndex == (int) ServerInfo.GamePhase.Drawing) {
+        if (SceneManager.GetActiveScene().buildIndex == (int) ServerInfo.GamePhase.Drawing) {
             for (int i = 0; i < GameObject.FindObjectOfType<ServerInfo>().networkObject.numPlayers; i++) {
                 networkObject.SendRpc(RPC_UPDATE_DOT, Receivers.AllBuffered, i, 1);
             }

@@ -27,8 +27,8 @@ public class Scoreboard : MonoBehaviour {
         }
         myPlayer = player;
 
-        myTankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];
-        myBaseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];
+        myTankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[myPlayer.GetPlayerNum() - 1];
+        myBaseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[myPlayer.GetPlayerNum() - 1];
         StartCoroutine(SortEntriesPeriodically());
     }
 

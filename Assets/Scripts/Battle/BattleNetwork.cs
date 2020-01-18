@@ -30,15 +30,22 @@ public class BattleNetwork : BattleNetworkBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
 
+        // // Init homebase
+        // foreach (GameObject homeBase in GameObject.FindGameObjectsWithTag("HomeBase")) {
+        //     if (homeBase.GetComponent<DrawableTexture>().ownerNum == ServerInfo.playerNum) {
+        //         homeBase.GetComponent<DrawableTexture>().networkObject.SendRpc(DrawableTextureBehavior.RPC_SEND_TEXTURE, Receivers.All, DrawableTexture.textures[(int)PlayerDraw.Drawings.HomeBase], ServerInfo.playerNum);
+        //     }
+        // }
+
         // Spawn tank
         PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity) as PlayerController;
-        newTank.playerNum = ServerInfo.playerNum;
+        newTank.networkObject.playerNum = ServerInfo.playerNum;
     }
 
     // Client only RPC to let the rest of the game know which tank is this client's
     public override void AssignMyPlayer(RpcArgs args) {
         foreach (PlayerController tank in GameObject.FindObjectsOfType<PlayerController>()) {
-            if (tank.playerNum == ServerInfo.playerNum) {
+            if (tank.networkObject.playerNum == ServerInfo.playerNum) {
                 myPlayer = tank;
                 Camera.main.GetComponent<CameraFollow>().player = myPlayer.transform;
                 GameObject.FindObjectOfType<Scoreboard>().InitScoreboard(myPlayer.GetComponent<PlayerStats>());

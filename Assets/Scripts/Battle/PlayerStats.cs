@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
 public class PlayerStats : MonoBehaviour {
 
@@ -49,10 +49,13 @@ public class PlayerStats : MonoBehaviour {
     }
 
     public int GetPlayerNum() {
-        return GetComponent<PlayerController>().playerNum;
+        return GetComponent<PlayerController>().networkObject.playerNum;
     }
 
     public static PlayerStats getPlayerStatsFromNumber(int playerNum) {
+        PlayerStats[] stats = GameObject.FindObjectsOfType<PlayerStats>();
+        foreach(PlayerStats stat in stats)
+            print(stat.GetPlayerNum());
         return GameObject.FindObjectsOfType<PlayerStats>().Where((player) => (player.GetPlayerNum() == playerNum)).First();
     }
 }

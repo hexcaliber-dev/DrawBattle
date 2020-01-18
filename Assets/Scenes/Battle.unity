@@ -1777,6 +1777,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: HomeBase (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3030163940081167330, guid: 5c8c7564f7a4d3648a1b490fd242041e,
+        type: 3}
+      propertyPath: ownerNum
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4656152995987681827, guid: 5c8c7564f7a4d3648a1b490fd242041e,
         type: 3}
       propertyPath: ownerNum
@@ -2166,6 +2171,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: HomeBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030163940081167330, guid: 5c8c7564f7a4d3648a1b490fd242041e,
+        type: 3}
+      propertyPath: ownerNum
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c8c7564f7a4d3648a1b490fd242041e, type: 3}

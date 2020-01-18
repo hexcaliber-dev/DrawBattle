@@ -35,7 +35,7 @@ public class QuitMenu : MonoBehaviour {
             GameObject.FindObjectOfType<ServerInfo>().networkObject.SendRpc(ServerInfoBehavior.RPC_LEAVE_GAME, Receivers.All, ServerInfo.playerNum);
             GameObject.FindObjectOfType<NetworkManager>().Disconnect();
         }
-        SceneManager.LoadScene(0);
+        ServerInfo.ChangePhase(ServerInfo.GamePhase.MainMenu);
         print("Disconnected from Server: Player Quit");
     }
 }

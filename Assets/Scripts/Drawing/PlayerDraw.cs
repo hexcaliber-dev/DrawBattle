@@ -39,7 +39,12 @@ public class PlayerDraw : PlayerDrawBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
         if (ServerInfo.isServer)
-            GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_SWITCH_TO_NEXT_DRAWING, Receivers.All);
+            StartCoroutine(delaySwitch());
+    }
+
+    IEnumerator delaySwitch() {
+        yield return new WaitForSeconds(0.5f);
+        GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_SWITCH_TO_NEXT_DRAWING, Receivers.All);
     }
 
     private void Update() {
@@ -115,7 +120,7 @@ public class PlayerDraw : PlayerDrawBehavior {
             print("Completed players: " + completedPlayers);
 
             if (completedPlayers == serverInfo.networkObject.numPlayers) {
-                serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Battling);
+                ServerInfo.ChangePhase(ServerInfo.GamePhase.Battling);
             }
         } else {
             Debug.LogError("Server-only RPC SendDrawing was called on a client!");

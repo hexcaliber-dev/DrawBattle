@@ -10,7 +10,7 @@ public class DrawableTexture : DrawableTextureBehavior {
     public static byte[][] textures = new byte[PlayerDraw.drawingNames.Length][];
     private byte[] textureData = new byte[0];
     private Texture2D texture;
-    private int ownerNum = 0;
+    public int ownerNum = 0;
     bool initialized = false;
 
     // Assign in inspector
