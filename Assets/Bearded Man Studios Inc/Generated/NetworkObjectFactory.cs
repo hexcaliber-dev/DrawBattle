@@ -67,10 +67,6 @@ namespace BeardedManStudios.Forge.Networking.Generated
 						availableCallback = true;
 						obj = new PlayerDrawNetworkObject(networker, id, frame);
 						break;
-					case PlayerObjNetworkObject.IDENTITY:
-						availableCallback = true;
-						obj = new PlayerObjNetworkObject(networker, id, frame);
-						break;
 					case PlayerShootNetworkObject.IDENTITY:
 						availableCallback = true;
 						obj = new PlayerShootNetworkObject(networker, id, frame);

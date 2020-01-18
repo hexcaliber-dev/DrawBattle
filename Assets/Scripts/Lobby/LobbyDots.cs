@@ -5,6 +5,7 @@ using BeardedManStudios.Forge.Networking.Generated;
 using BeardedManStudios.Forge.Networking.Unity;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// Displays the status of players in the lobby on the palette
@@ -30,10 +31,19 @@ public class LobbyDots : LobbyDotsBehavior {
     void Start() {
         for (int i = 0; i < playerIcons.Count; i++) {
             StartCoroutine(AnimateDots(playerIcons[i]));
-            if(i == 0)
+            if (i == 0)
                 ApplyDotState(i, 1);
             else
                 ApplyDotState(i, 0);
+        }
+    }
+
+    protected override void NetworkStart() {
+        base.NetworkStart();
+        if (ServerInfo.isServer && SceneManager.GetActiveScene().buildIndex == (int) ServerInfo.GamePhase.Drawing) {
+            for (int i = 0; i < GameObject.FindObjectOfType<ServerInfo>().networkObject.numPlayers; i++) {
+                networkObject.SendRpc(RPC_UPDATE_DOT, Receivers.AllBuffered, i, 1);
+            }
         }
     }
 
@@ -42,7 +52,7 @@ public class LobbyDots : LobbyDotsBehavior {
             int dotIndex = 0;
             if (playerIcon.gameObject.activeSelf) {
                 foreach (Transform dot in playerIcon.GetComponentsInChildren<Transform>()) {
-                    if(dot != playerIcon.transform) {
+                    if (dot != playerIcon.transform) {
                         dot
                             .DOMoveY(dot.transform.position.y + bounceHeight, bounceTime / 2)
                             .SetDelay(dotIndex * bounceTime / 2)
@@ -62,6 +72,7 @@ public class LobbyDots : LobbyDotsBehavior {
 
     public override void UpdateDot(RpcArgs args) {
         int dotNum = args.GetNext<int>();
+        print("Update dot for player" + (dotNum + 1));
 
         // 0 is hidden, 1 is waiting, 2 is ready
         int dotState = args.GetNext<int>();
@@ -72,22 +83,24 @@ public class LobbyDots : LobbyDotsBehavior {
     void ApplyDotState(int dotNum, int newState) {
         if (playerIcons.Count > dotNum) {
             dotStates[dotNum] = newState;
-            switch (newState) {
-                case 0: // Hidden
-                    playerIcons[dotNum].gameObject.SetActive(false);
-                    playerReadyIcons[dotNum].gameObject.SetActive(false);
-                    break;
-                case 1: // Waiting
-                    playerIcons[dotNum].gameObject.SetActive(true);
-                    playerReadyIcons[dotNum].gameObject.SetActive(false);
-                    break;
-                case 2: // Ready
-                    playerIcons[dotNum].gameObject.SetActive(false);
-                    playerReadyIcons[dotNum].gameObject.SetActive(true);
-                    break;
-                default:
-                    Debug.LogError("Invalid dot state in UpdateDot(): " + newState + " passed for dot " + dotNum + ". dotState must be 0, 1, or 2");
-                    break;
+            if(playerIcons[dotNum] != null) {
+                switch (newState) {
+                    case 0: // Hidden
+                        playerIcons[dotNum].gameObject.SetActive(false);
+                        playerReadyIcons[dotNum].gameObject.SetActive(false);
+                        break;
+                    case 1: // Waiting
+                        playerIcons[dotNum].gameObject.SetActive(true);
+                        playerReadyIcons[dotNum].gameObject.SetActive(false);
+                        break;
+                    case 2: // Ready
+                        playerIcons[dotNum].gameObject.SetActive(false);
+                        playerReadyIcons[dotNum].gameObject.SetActive(true);
+                        break;
+                    default:
+                        Debug.LogError("Invalid dot state in UpdateDot(): " + newState + " passed for dot " + dotNum + ". dotState must be 0, 1, or 2");
+                        break;
+                }
             }
         }
     }

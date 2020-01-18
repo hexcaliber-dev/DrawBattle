@@ -32,7 +32,6 @@ public class BarrierBlock : BarrierBlockBehavior {
     public void DamageBlock(int damage) {
         // int damage = args.GetNext<int>();
         health -= damage;
-        print("HEALTH: " + health);
         Color c = ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1];
         ChangeColor(new Color(c.r, c.g, c.b, health / 100f));
         if (health <= 0 && networkObject.IsOwner) {
@@ -42,7 +41,6 @@ public class BarrierBlock : BarrierBlockBehavior {
 
     // Change this block's color using PropertyBlocks. See http://thomasmountainborn.com/2016/05/25/materialpropertyblocks/ for more info
     void ChangeColor(Color newColor) {
-        print("CHANGE COLOR TO " + newColor);
         rend.GetPropertyBlock(propBlock);
         propBlock.SetColor("_Color", newColor);
         rend.SetPropertyBlock(propBlock);

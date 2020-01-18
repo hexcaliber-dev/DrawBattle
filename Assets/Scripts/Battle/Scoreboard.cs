@@ -17,17 +17,15 @@ public class Scoreboard : MonoBehaviour {
         entries = GetComponentsInChildren<ScoreboardEntry>();
     }
 
-    public void InitScoreboard() {
+    public void InitScoreboard(PlayerStats player) {
         players = GameObject.FindObjectsOfType<PlayerStats>();
+        // Hide extra scoreboard entries
+        print("Scoreboard detected " + players.Length + " players");
         for (int i = 1; i < entries.Length; i++) {
             if (i >= players.Length)
                 entries[i].gameObject.SetActive(false);
         }
-
-        foreach (PlayerStats player in players) {
-            if (player.GetPlayerNum() == ServerInfo.playerNum)
-                myPlayer = player;
-        }
+        myPlayer = player;
 
         myTankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];
         myBaseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[ServerInfo.playerNum - 1];

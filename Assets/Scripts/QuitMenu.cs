@@ -31,8 +31,10 @@ public class QuitMenu : MonoBehaviour {
 
     public void QuitToMainMenu() {
         ServerInfo.expectingQuit = true;
-        GameObject.FindObjectOfType<ServerInfo>().networkObject.SendRpc(ServerInfoBehavior.RPC_LEAVE_GAME, Receivers.All, ServerInfo.playerNum);
-        GameObject.FindObjectOfType<NetworkManager>().Disconnect();
+        if (GameObject.FindObjectOfType<ServerInfo>().networkObject != null) {
+            GameObject.FindObjectOfType<ServerInfo>().networkObject.SendRpc(ServerInfoBehavior.RPC_LEAVE_GAME, Receivers.All, ServerInfo.playerNum);
+            GameObject.FindObjectOfType<NetworkManager>().Disconnect();
+        }
         SceneManager.LoadScene(0);
         print("Disconnected from Server: Player Quit");
     }

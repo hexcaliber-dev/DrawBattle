@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class Timer : TimerBehavior {
 
     // Amount of time given to each phase (MAINMENU, LOBBY, DRAW, BATTLE, VOTE). -1 means this phase is untimed.
-    static readonly int[] STARTING_TIMES = {-1, -1, 3, 10, 3 };
+    static readonly int[] STARTING_TIMES = {-1, -1, 30, 60, 30 };
 
     [SerializeField]
     Text timerText;
@@ -42,6 +42,9 @@ public class Timer : TimerBehavior {
                 currCountdown = CountDown(STARTING_TIMES[scene.buildIndex], scene.buildIndex);
                 StartCoroutine(currCountdown);
             }
+            // Do the fill animation
+            fillImg.fillAmount = 0;
+            DOTween.To(() => fillImg.fillAmount, x => fillImg.fillAmount = x, 1, STARTING_TIMES[scene.buildIndex]).SetEase(Ease.Linear);
         } else {
             GetComponent<CanvasGroup>().alpha = 0f;
         }
@@ -54,10 +57,6 @@ public class Timer : TimerBehavior {
         }
 
         networkObject.timeRemaining = startingTime;
-
-        // Do the fill animation
-        fillImg.fillAmount = 0;
-        DOTween.To(() => fillImg.fillAmount, x => fillImg.fillAmount = x, 1, startingTime).SetEase(Ease.Linear);
 
         if (ServerInfo.isServer) {
             while (networkObject.timeRemaining > 0) {
@@ -75,7 +74,7 @@ public class Timer : TimerBehavior {
                     GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
                     // Save drawing locally
                     byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
-                    DrawableTexture.textures[(int)PlayerDraw.currDrawing] = textureData;
+                    DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
                     break;
 
                 case (int) ServerInfo.GamePhase.Battling:
@@ -83,7 +82,7 @@ public class Timer : TimerBehavior {
                     break;
 
                 case (int) ServerInfo.GamePhase.Voting:
-                    PlayerDraw.currDrawing++;
+                    // PlayerDraw.currDrawing++; done in NetworkStart in PlayerDraw
                     SceneManager.LoadScene(2);
                     break;
             }

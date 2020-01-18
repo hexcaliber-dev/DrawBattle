@@ -28,15 +28,13 @@ public class PlayerController : PlayerControllerBehavior {
         angularSpeed = 0;
         // Reset z to 0
         transform.Translate(0, 0, -transform.position.z);
-        networkObject.AssignOwnership(owner);
+        // networkObject.AssignOwnership(owner);
         // Let player pass through their own base
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Barrier")) {
             if (obj.GetComponent<BarrierBlock>().ownerNum == playerNum) {
                 Physics.IgnoreCollision(obj.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
-                print("Found player");
             }
         }
-        GameObject.FindObjectOfType<Scoreboard>().InitScoreboard();
     }
 
     void FixedUpdate() {

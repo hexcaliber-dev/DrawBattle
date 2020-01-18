@@ -9,9 +9,11 @@ public class CameraFollow : MonoBehaviour {
     public Vector3 offset;
 
     void FixedUpdate() {
-        Vector3 desiredPosition = player.position + offset;
-        Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
-        transform.position = new Vector3(smoothedPosition.x, smoothedPosition.y, -10f);
+        if(player != null) { // Should be assigned in BattleNetwork
+            Vector3 desiredPosition = player.position + offset;
+            Vector3 smoothedPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed);
+            transform.position = new Vector3(smoothedPosition.x, smoothedPosition.y, -10f);
+        }
     }
 
 }

@@ -27,13 +27,19 @@ public class PlayerDraw : PlayerDrawBehavior {
     public Text infoText;
 
     /// What the player is currently drawing. 0-homebase, 1-projectile, 2-tankbase, 3-tanktop, 4-barriers
-    public static int currDrawing = 0;
+    public static int currDrawing = -1;
     public static readonly string[] drawingNames = { "home base", "projectile", "tank base", "tank head", "barrier blocks" };
     public enum Drawings { HomeBase, Projectile, TankBase, TankHead, BarrierBlock }
 
     private void Start() {
         serverInfo = GameObject.FindObjectOfType<ServerInfo>();
-        infoText.text = "Draw your " + drawingNames[currDrawing];
+
+    }
+
+    protected override void NetworkStart() {
+        base.NetworkStart();
+        if (ServerInfo.isServer)
+            GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_SWITCH_TO_NEXT_DRAWING, Receivers.All);
     }
 
     private void Update() {
@@ -106,6 +112,7 @@ public class PlayerDraw : PlayerDrawBehavior {
 
         if (ServerInfo.isServer) {
             completedPlayers++;
+            print("Completed players: " + completedPlayers);
 
             if (completedPlayers == serverInfo.networkObject.numPlayers) {
                 serverInfo.networkObject.SendRpc(ServerInfo.RPC_CHANGE_PHASE, Receivers.All, (int) ServerInfo.GamePhase.Battling);
@@ -113,6 +120,12 @@ public class PlayerDraw : PlayerDrawBehavior {
         } else {
             Debug.LogError("Server-only RPC SendDrawing was called on a client!");
         }
+    }
+
+    /// All-instance RPC
+    public override void SendSwitchToNextDrawing(RpcArgs args) {
+        currDrawing++;
+        infoText.text = "Draw your " + drawingNames[currDrawing];
     }
 
     // Run when submit button is clicked
@@ -129,7 +142,7 @@ public class PlayerDraw : PlayerDrawBehavior {
             submitButton.image.sprite = submittedImg;
 
             // Update dot
-            GameObject.FindObjectOfType<LobbyDots>().networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 1);
+            GameObject.FindObjectOfType<LobbyDots>().networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 2);
 
             // Disable drawing
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
