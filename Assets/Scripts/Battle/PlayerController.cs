@@ -43,6 +43,13 @@ public class PlayerController : PlayerControllerBehavior {
             Movement();
         }
         ServerUpdate();
+
+        // Shooting
+        if (Input.GetKeyDown(KeyCode.Space) && GetComponentInParent<PlayerController>().networkObject.IsOwner && ServerInfo.playerNum > 0) {
+            Projectile newProj = NetworkManager.Instance.InstantiateProjectile(0, transform.position, transform.rotation) as Projectile;
+            newProj.tempOwnerNum = playerNum;
+            Physics.IgnoreCollision(GetComponentInParent<BoxCollider>(), newProj.GetComponent<BoxCollider>());
+        }
     }
 
     void ServerUpdate() {

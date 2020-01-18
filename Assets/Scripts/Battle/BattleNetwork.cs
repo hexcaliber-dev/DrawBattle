@@ -30,24 +30,9 @@ public class BattleNetwork : BattleNetworkBehavior {
     protected override void NetworkStart() {
         base.NetworkStart();
 
-        print("request spawn tank " + ServerInfo.playerNum);
-        // if(ServerInfo.isServer) {
-        // networkObject.SendRpc(RPC_SPAWN_TANK, Receivers.Server, ServerInfo.playerNum);
+        // Spawn tank
         PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity) as PlayerController;
         newTank.playerNum = ServerInfo.playerNum;
-        // }
-    }
-
-    // Server only RPC to spawn tanks on join
-    public override void SpawnTank(RpcArgs args) {
-        int ownerNum = args.GetNext<int>();
-
-        if (ownerNum > 0) {
-            print("Spawn tank " + ownerNum);
-            PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ownerNum - 1].position, Quaternion.identity) as PlayerController;
-            newTank.playerNum = ownerNum;
-            newTank.owner = args.Info.SendingPlayer;
-        }
     }
 
     // Client only RPC to let the rest of the game know which tank is this client's
