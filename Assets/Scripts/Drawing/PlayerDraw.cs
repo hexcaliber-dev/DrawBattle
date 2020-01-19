@@ -141,6 +141,7 @@ public class PlayerDraw : PlayerDrawBehavior {
 
             // Update button
             submitButton.image.sprite = submittedImg;
+            submitButton.interactable = false;
 
             // Update dot
             GameObject.FindObjectOfType<LobbyDots>().networkObject.SendRpc(LobbyDotsBehavior.RPC_UPDATE_DOT, Receivers.AllBuffered, ServerInfo.playerNum - 1, 2);

@@ -17,13 +17,13 @@ public class ScoreboardEntry : MonoBehaviour {
 
     public void UpdateEntry(PlayerStats newPlayer) {
         playerNum = newPlayer.GetPlayerNum();
-        print("Update scoreboard for player " + playerNum);
-        if(playerNum == 0)
-            Debug.LogError("Scoreboard cannot update entries for player 0!!");
+        // print("Update scoreboard for player " + playerNum);
+        if(playerNum != 0) {
+            baseHealth.text = newPlayer.baseHealth.ToString();
+            tankHealth.text = newPlayer.tankHealth.ToString();
+            baseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
+            tankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
+        }
             
-        baseHealth.text = newPlayer.baseHealth.ToString();
-        tankHealth.text = newPlayer.tankHealth.ToString();
-        baseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
-        tankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
     }
 }

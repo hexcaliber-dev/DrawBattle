@@ -17,7 +17,7 @@ public class Projectile : ProjectileBehavior {
 
     protected override void NetworkStart() {
         base.NetworkStart();
-        transform.position = new Vector3(networkObject.position.x, networkObject.position.y, 10);
+        transform.position = new Vector3(transform.position.x, transform.position.y, 10);
         if (tempOwnerNum != 0) {
             networkObject.ownerNum = tempOwnerNum;
         }
@@ -30,7 +30,7 @@ public class Projectile : ProjectileBehavior {
                 transform.position += transform.up * speed;
                 networkObject.position = transform.position;
                 networkObject.rotation = transform.rotation;
-            } else {
+            } else if(networkObject.position.x != 0 && networkObject.position.y != 0) {
                 transform.position = networkObject.position;
                 transform.rotation = networkObject.rotation;
             }

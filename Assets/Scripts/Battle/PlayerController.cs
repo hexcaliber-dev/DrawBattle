@@ -32,12 +32,6 @@ public class PlayerController : PlayerControllerBehavior {
         // Reset z to 0
         transform.Translate(0, 0, -transform.position.z);
         // networkObject.AssignOwnership(owner);
-        // Let player pass through their own base
-        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Barrier")) {
-            if (obj.GetComponent<BarrierBlock>().ownerNum == networkObject.playerNum) {
-                Physics.IgnoreCollision(obj.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
-            }
-        }
     }
 
     void FixedUpdate() {
@@ -60,6 +54,12 @@ public class PlayerController : PlayerControllerBehavior {
             DrawableTexture[] texs = GetComponentsInChildren<DrawableTexture>();
             foreach (DrawableTexture tex in texs)
                 tex.ChangeTexture(networkObject.playerNum);
+            // Let player pass through their own base
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Barrier")) {
+                if (obj.GetComponent<BarrierBlock>().ownerNum == networkObject.playerNum) {
+                    Physics.IgnoreCollision(obj.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
+                }
+            }
             initialized = true;
         }
     }
