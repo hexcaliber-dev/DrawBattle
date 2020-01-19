@@ -17,11 +17,10 @@ public class DrawableTexture : MonoBehaviour {
 
     // Remember to call this on any accompanying scripts once owner has been assigned!
     public void ChangeTexture(int owner) {
-        try {
+        byte[] data = textures[owner][(int) drawingType];
+        if (data != null && data.Length > 0) {
             texture.LoadRawTextureData(textures[owner][(int) drawingType]);
             texture.Apply();
-        } catch {
-            print("Could not change texture for " + drawingType + " for player " + owner);
         }
     }
 

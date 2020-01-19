@@ -17,6 +17,7 @@ public class PlayerController : PlayerControllerBehavior {
     private float turn;
     private float direction;
     private Vector3 changeVector;
+    private bool initialized;
 
     public NetworkingPlayer owner;
 
@@ -25,6 +26,9 @@ public class PlayerController : PlayerControllerBehavior {
         base.NetworkStart();
         speed = 0;
         angularSpeed = 0;
+        if (networkObject.IsOwner)
+            networkObject.playerNum = ServerInfo.playerNum;
+
         // Reset z to 0
         transform.Translate(0, 0, -transform.position.z);
         // networkObject.AssignOwnership(owner);
@@ -48,6 +52,15 @@ public class PlayerController : PlayerControllerBehavior {
             Projectile newProj = NetworkManager.Instance.InstantiateProjectile(0, transform.position, transform.rotation) as Projectile;
             newProj.tempOwnerNum = networkObject.playerNum;
             Physics.IgnoreCollision(GetComponentInParent<BoxCollider>(), newProj.GetComponent<BoxCollider>());
+        }
+
+        // Init script
+        if (networkObject.playerNum != 0 && !initialized) {
+            // Init textures
+            DrawableTexture[] texs = GetComponentsInChildren<DrawableTexture>();
+            foreach (DrawableTexture tex in texs)
+                tex.ChangeTexture(networkObject.playerNum);
+            initialized = true;
         }
     }
 

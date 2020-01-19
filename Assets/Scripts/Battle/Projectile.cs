@@ -17,9 +17,10 @@ public class Projectile : ProjectileBehavior {
 
     protected override void NetworkStart() {
         base.NetworkStart();
-        transform.position = new Vector3(transform.position.x, transform.position.y, 10);
-        if (tempOwnerNum != 0)
+        transform.position = new Vector3(networkObject.position.x, networkObject.position.y, 10);
+        if (tempOwnerNum != 0) {
             networkObject.ownerNum = tempOwnerNum;
+        }
     }
 
     // Update is called once per frame
@@ -32,6 +33,11 @@ public class Projectile : ProjectileBehavior {
             } else {
                 transform.position = networkObject.position;
                 transform.rotation = networkObject.rotation;
+            }
+
+            if (!initialized && networkObject.ownerNum != 0) {
+                GetComponent<DrawableTexture>().ChangeTexture(networkObject.ownerNum);
+                initialized = true;
             }
         }
     }
