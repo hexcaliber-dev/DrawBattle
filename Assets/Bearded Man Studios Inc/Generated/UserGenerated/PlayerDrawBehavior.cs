@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace BeardedManStudios.Forge.Networking.Generated
 {
-	[GeneratedRPC("{\"types\":[[\"byte[]\", \"int\"][\"int\"][]]")]
-	[GeneratedRPCVariableNames("{\"types\":[[\"textureData\", \"player\"][\"playerNum\"][]]")]
+	[GeneratedRPC("{\"types\":[[\"byte[]\", \"int\"][\"int\", \"byte[]\"][]]")]
+	[GeneratedRPCVariableNames("{\"types\":[[\"textureData\", \"player\"][\"playerNum\", \"textureData\"][]]")]
 	public abstract partial class PlayerDrawBehavior : NetworkBehavior
 	{
 		public const byte RPC_SEND_FULL_TEXTURE = 0 + 5;
@@ -25,7 +25,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 
 			base.SetupHelperRpcs(networkObject);
 			networkObject.RegisterRpc("SendFullTexture", SendFullTexture, typeof(byte[]), typeof(int));
-			networkObject.RegisterRpc("SendDrawingComplete", SendDrawingComplete, typeof(int));
+			networkObject.RegisterRpc("SendDrawingComplete", SendDrawingComplete, typeof(int), typeof(byte[]));
 			networkObject.RegisterRpc("SendSwitchToNextDrawing", SendSwitchToNextDrawing);
 
 			networkObject.onDestroy += DestroyGameObject;
@@ -112,6 +112,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 		/// <summary>
 		/// Arguments:
 		/// int playerNum
+		/// byte[] textureData
 		/// </summary>
 		public abstract void SendDrawingComplete(RpcArgs args);
 		/// <summary>

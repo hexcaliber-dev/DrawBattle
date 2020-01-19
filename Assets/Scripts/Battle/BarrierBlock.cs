@@ -6,7 +6,7 @@ using BeardedManStudios.Forge.Networking.Unity;
 using UnityEngine;
 
 /// Used for network management during the battle phase
-public class BarrierBlock : BarrierBlockBehavior {
+public class BarrierBlock : MonoBehaviour {
 
     public int ownerNum;
 
@@ -14,14 +14,6 @@ public class BarrierBlock : BarrierBlockBehavior {
 
     MaterialPropertyBlock propBlock;
     Renderer rend;
-
-    protected override void NetworkStart() {
-        base.NetworkStart();
-        if (ownerNum != 0) {
-            ChangeColor(ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1]);
-        } else
-            Debug.LogError("BarrierBlock owner was set to 0!");
-    }
 
     void Awake() {
         propBlock = new MaterialPropertyBlock();
@@ -34,8 +26,8 @@ public class BarrierBlock : BarrierBlockBehavior {
         health -= damage;
         Color c = ServerInfo.PLAYER_COLOR_PRESETS[ownerNum - 1];
         ChangeColor(new Color(c.r, c.g, c.b, health / 100f));
-        if (health <= 0 && networkObject.IsOwner) {
-            networkObject.Destroy();
+        if (health <= 0) {
+           Destroy(gameObject);
         }
     }
 
@@ -57,5 +49,4 @@ public class BarrierBlock : BarrierBlockBehavior {
             col.gameObject.GetComponent<Projectile>().networkObject.Destroy();
         }
     }
-
 }

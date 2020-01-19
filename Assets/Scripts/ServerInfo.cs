@@ -18,6 +18,9 @@ public class ServerInfo : ServerInfoBehavior {
     // Used for LOCAL games, and temporarily for online-- but in the future online games will have dynamically assigned ports
     public const ushort SERVER_PORT = 15937;
 
+    // Max number of players supported.
+    public const int MAX_PLAYERS = 8;
+
     // This player's number, assigned by join order
     public static int playerNum = 0;
 
@@ -56,6 +59,11 @@ public class ServerInfo : ServerInfoBehavior {
         DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += ManageCursorOnSceneLoad;
+
+        // Prepare texture cache
+        DrawableTexture.textures = new byte[MAX_PLAYERS][][];
+        for (int i = 0; i < DrawableTexture.textures.Length; i++)
+            DrawableTexture.textures[i] = new byte[PlayerDraw.drawingNames.Length][];
     }
 
     // Update is called once per frame
@@ -110,6 +118,10 @@ public class ServerInfo : ServerInfoBehavior {
     public void RequestJoin() {
         playerNum = networkObject.numPlayers + 1;
         networkObject.SendRpc(RPC_JOIN_GAME, Receivers.Server);
+    }
+
+    public static int GetNumPlayers() {
+        return GameObject.FindObjectOfType<ServerInfo>().networkObject.numPlayers;
     }
 
     // Should be run on connection established

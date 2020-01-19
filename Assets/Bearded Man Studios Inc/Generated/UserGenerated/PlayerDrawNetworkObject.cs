@@ -8,7 +8,7 @@ namespace BeardedManStudios.Forge.Networking.Generated
 	[GeneratedInterpol("{\"inter\":[]")]
 	public partial class PlayerDrawNetworkObject : NetworkObject
 	{
-		public const int IDENTITY = 12;
+		public const int IDENTITY = 17;
 
 		private byte[] _dirtyFields = new byte[0];
 

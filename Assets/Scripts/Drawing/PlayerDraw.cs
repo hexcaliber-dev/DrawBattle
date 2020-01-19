@@ -106,9 +106,10 @@ public class PlayerDraw : PlayerDrawBehavior {
         paintCanvas.SetAllTextureData(textureData.Compress());
     }
 
-    /// Should be run ONLY by the server.
+    /// All-instance RPC. Server has additional tracking capabilities
     public override void SendDrawingComplete(RpcArgs args) {
         int playerNum = args.GetNext<int>();
+        byte[] textureData = args.GetNext<byte[]>();
 
         if (ServerInfo.isServer) {
             completedPlayers++;
@@ -117,9 +118,11 @@ public class PlayerDraw : PlayerDrawBehavior {
             if (completedPlayers == serverInfo.networkObject.numPlayers) {
                 ServerInfo.ChangePhase(ServerInfo.GamePhase.Battling);
             }
-        } else {
-            Debug.LogError("Server-only RPC SendDrawing was called on a client!");
         }
+
+        // Save drawing locally
+        DrawableTexture.textures[playerNum][(int) PlayerDraw.currDrawing] = textureData.Decompress();
+
     }
 
     /// All-instance RPC
@@ -131,12 +134,10 @@ public class PlayerDraw : PlayerDrawBehavior {
     // Run when submit button is clicked
     public void RequestCompleteDrawing() {
         if (networkObject != null) {
-            // Send drawing to server
-            networkObject.SendRpc(RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
+            byte[] textureData = paintCanvas.GetAllTextureData();
 
-            // Save drawing locally
-            byte[] textureData = paintCanvas.GetAllTextureData().Compress();
-            DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
+            // Send drawing to server (and save locally)
+            networkObject.SendRpc(RPC_SEND_DRAWING_COMPLETE, Receivers.AllBuffered, ServerInfo.playerNum, textureData.Compress());
 
             // Update button
             submitButton.image.sprite = submittedImg;

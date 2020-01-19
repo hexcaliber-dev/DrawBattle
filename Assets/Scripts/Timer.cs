@@ -71,10 +71,8 @@ public class Timer : TimerBehavior {
                 switch (buildIndex) {
                     case (int) ServerInfo.GamePhase.Drawing:
                         // Send drawing to server
-                        GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum);
-                        // Save drawing locally
                         byte[] textureData = GameObject.FindObjectOfType<PaintCanvas>().GetAllTextureData().Compress();
-                        DrawableTexture.textures[(int) PlayerDraw.currDrawing] = textureData;
+                        GameObject.FindObjectOfType<PlayerDraw>().networkObject.SendRpc(PlayerDrawBehavior.RPC_SEND_DRAWING_COMPLETE, Receivers.Server, ServerInfo.playerNum, textureData);
                         break;
 
                     case (int) ServerInfo.GamePhase.Battling:

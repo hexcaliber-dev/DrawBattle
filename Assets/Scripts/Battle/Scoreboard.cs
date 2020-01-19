@@ -42,7 +42,7 @@ public class Scoreboard : MonoBehaviour {
 
     // Sorts players by base health, descending
     // Interval = seconds in between updates
-    IEnumerator SortEntriesPeriodically(float interval = 1f) {
+    IEnumerator SortEntriesPeriodically(float interval = 0.25f) {
         while (true) {
             List<PlayerStats> sortedPlayers = players.OfType<PlayerStats>().ToList();
             sortedPlayers.Sort((a, b) => (a.baseHealth.CompareTo(b.baseHealth)));

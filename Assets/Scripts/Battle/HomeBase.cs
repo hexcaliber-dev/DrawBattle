@@ -16,7 +16,11 @@ public class HomeBase : HomeBaseBehavior {
     }
 
     public override void InitBlocks(RpcArgs args) {
-        int owner = args.GetNext<int>();
+        int owner = args.GetNext<int>(); 
+
+        // Init drawing for homebase
+        GetComponent<DrawableTexture>().ChangeTexture(owner);
+        
         foreach (BarrierBlock block in GetComponentsInChildren<BarrierBlock>()) {
             block.ownerNum = owner;
             block.ResetColor();
