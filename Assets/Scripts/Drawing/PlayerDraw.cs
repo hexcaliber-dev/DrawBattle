@@ -22,6 +22,8 @@ public class PlayerDraw : PlayerDrawBehavior {
     public bool eraserEnabled = false;
 
     public Sprite penEnabledImg, penDisabledImg, eraserEnabledImg, eraserDisabledImg, submittedImg;
+    public Texture[] silhouettes;
+    public Material silhouette;
     public Button penButton, eraserButton;
     public Button submitButton;
     public Text infoText;
@@ -129,6 +131,7 @@ public class PlayerDraw : PlayerDrawBehavior {
     public override void SendSwitchToNextDrawing(RpcArgs args) {
         currDrawing++;
         infoText.text = "Draw your " + drawingNames[currDrawing];
+        silhouette.mainTexture = silhouettes[currDrawing];
     }
 
     // Run when submit button is clicked
