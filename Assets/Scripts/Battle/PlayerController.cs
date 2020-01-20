@@ -55,9 +55,10 @@ public class PlayerController : PlayerControllerBehavior {
             foreach (DrawableTexture tex in texs)
                 tex.ChangeTexture(networkObject.playerNum);
             // Let player pass through their own base
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Barrier")) {
-                if (obj.GetComponent<BarrierBlock>().ownerNum == networkObject.playerNum) {
-                    Physics.IgnoreCollision(obj.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
+            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("HomeBase")) {
+                if (obj.GetComponentInParent<HomeBase>().networkObject.IsOwner) {
+                    foreach(BarrierBlock barrier in obj.GetComponentsInChildren<BarrierBlock>())
+                        Physics.IgnoreCollision(barrier.GetComponent<BoxCollider>(), GetComponent<BoxCollider>());
                 }
             }
             initialized = true;

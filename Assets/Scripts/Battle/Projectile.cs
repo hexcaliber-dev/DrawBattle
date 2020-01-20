@@ -21,6 +21,11 @@ public class Projectile : ProjectileBehavior {
         if (tempOwnerNum != 0) {
             networkObject.ownerNum = tempOwnerNum;
         }
+
+        if (!networkObject.IsOwner) {
+            GetComponent<Rigidbody>().isKinematic = true;
+            GetComponent<BoxCollider>().enabled = false;
+        }
     }
 
     // Update is called once per frame
@@ -30,7 +35,7 @@ public class Projectile : ProjectileBehavior {
                 transform.position += transform.up * speed;
                 networkObject.position = transform.position;
                 networkObject.rotation = transform.rotation;
-            } else if(networkObject.position.x != 0 && networkObject.position.y != 0) {
+            } else if (networkObject.position.x != 0 && networkObject.position.y != 0) {
                 transform.position = networkObject.position;
                 transform.rotation = networkObject.rotation;
             }
@@ -43,9 +48,26 @@ public class Projectile : ProjectileBehavior {
     }
 
     void OnTriggerEnter(Collider col) {
-        if (col.gameObject.tag == "HomeBase") {
-            if (ServerInfo.playerNum != col.gameObject.GetComponentInChildren<BarrierBlock>().ownerNum) {
-                PlayerStats.getPlayerStatsFromNumber(col.gameObject.GetComponentInChildren<BarrierBlock>().ownerNum).ChangeStat("baseHealth", -damage);
+        if (networkObject.IsOwner) {
+            if (col.gameObject.tag == "HomeBase") {
+                int baseNum = col.gameObject.GetComponentInChildren<BarrierBlock>().ownerNum;
+                if (ServerInfo.playerNum != baseNum) {
+                    PlayerStats.getPlayerStatsFromNumber(baseNum).ChangeStat("baseHealth", -damage);
+                }
+            }
+        }
+    }
+
+    void OnCollisionEnter(Collision col) {
+        if (networkObject != null) {
+            // Collisions are ignored between player and their own base already 
+            if (networkObject.IsOwner && col.gameObject.tag == "Barrier") {
+                BarrierBlock block = col.gameObject.GetComponent<BarrierBlock>();
+                if(!block.networkObject.IsOwner) {
+                    block.networkObject.health -= damage;
+                    block.networkObject.SendRpc(BarrierBlockBehavior.RPC_CHANGE_COLOR, Receivers.AllBuffered, -damage);
+                    networkObject.Destroy();
+                }
             }
         }
     }

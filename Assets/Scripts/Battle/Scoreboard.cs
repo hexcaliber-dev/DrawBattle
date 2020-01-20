@@ -35,8 +35,8 @@ public class Scoreboard : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if(myPlayer != null) {
-            myTankHealth.text = myPlayer.tankHealth.ToString();
-            myBaseHealth.text = myPlayer.baseHealth.ToString();
+            myTankHealth.text = myPlayer.networkObject.tankHealth.ToString();
+            myBaseHealth.text = myPlayer.networkObject.baseHealth.ToString();
         }
     }
 
@@ -45,7 +45,7 @@ public class Scoreboard : MonoBehaviour {
     IEnumerator SortEntriesPeriodically(float interval = 0.25f) {
         while (true) {
             List<PlayerStats> sortedPlayers = players.OfType<PlayerStats>().ToList();
-            sortedPlayers.Sort((a, b) => (a.baseHealth.CompareTo(b.baseHealth)));
+            sortedPlayers.Sort((a, b) => (a.networkObject.baseHealth.CompareTo(b.networkObject.baseHealth)));
             for (int i = 0; i < sortedPlayers.Count; i++) {
                 entries[i].UpdateEntry(sortedPlayers[i]);
             }

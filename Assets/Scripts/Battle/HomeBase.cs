@@ -20,10 +20,9 @@ public class HomeBase : HomeBaseBehavior {
 
         // Init drawing for homebase
         GetComponent<DrawableTexture>().ChangeTexture(owner);
-        
+
         foreach (BarrierBlock block in GetComponentsInChildren<BarrierBlock>()) {
             block.ownerNum = owner;
-            block.ResetColor();
         }
     }
 }

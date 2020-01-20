@@ -35,7 +35,6 @@ public class BattleNetwork : BattleNetworkBehavior {
 
         // Spawn tank
         PlayerController newTank = NetworkManager.Instance.InstantiatePlayerController(0, spawnLocations[ServerInfo.playerNum - 1].position, Quaternion.identity) as PlayerController;
-        newTank.networkObject.playerNum = ServerInfo.playerNum;
     }
 
     // Client only RPC to let the rest of the game know which tank is this client's

@@ -19,8 +19,8 @@ public class ScoreboardEntry : MonoBehaviour {
         playerNum = newPlayer.GetPlayerNum();
         // print("Update scoreboard for player " + playerNum);
         if(playerNum != 0) {
-            baseHealth.text = newPlayer.baseHealth.ToString();
-            tankHealth.text = newPlayer.tankHealth.ToString();
+            baseHealth.text = newPlayer.networkObject.baseHealth.ToString();
+            tankHealth.text = newPlayer.networkObject.tankHealth.ToString();
             baseImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
             tankImg.color = ServerInfo.PLAYER_COLOR_PRESETS[playerNum - 1];
         }

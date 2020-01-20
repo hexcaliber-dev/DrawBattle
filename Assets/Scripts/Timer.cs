@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class Timer : TimerBehavior {
 
     // Amount of time given to each phase (MAINMENU, LOBBY, DRAW, BATTLE, VOTE). -1 means this phase is untimed.
-    static readonly int[] STARTING_TIMES = {-1, -1, 30, 10, 3 };
+    static readonly int[] STARTING_TIMES = {-1, -1, 30, 30, 3 };
 
     [SerializeField]
     Text timerText;
